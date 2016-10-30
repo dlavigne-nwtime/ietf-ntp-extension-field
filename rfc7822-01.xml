@@ -264,8 +264,8 @@
 
       <section title="NEW: 7.5 NTP Extension Field Format">
 	<t>In NTPv4, one or more extension fields can be inserted after the
-	  header and before the possibly optional MAC, which is usually
-	  present when an extension field is present.  A MAC is always
+	  header and before the possibly optional legacy MAC.  A MAC SHOULD
+	  be present when an extension field is present.  A MAC is always
 	  present in some form when NTP packets are authenticated.  This MAC
 	  can be either a legacy MAC, or a MAC-EF.  Other than defining the
 	  field format, this document makes no use of the field contents.
