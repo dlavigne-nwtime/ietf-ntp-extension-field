@@ -39,7 +39,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-stenn-ntp-extension-fields-00" ipr="trust200902">
+<rfc category="std" docName="draft-stenn-ntp-extension-fields-01" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -132,7 +132,7 @@
 
 <!-- other authors -->
 
-    <date month="November" year="2016"/>
+    <date month="August" year="2017"/>
 
     <!-- If the month and year are both specified and are the current ones,
          xml2rfc will fill in the current day for you. If only the current
@@ -300,18 +300,18 @@
 
       <t>The Length field is a 16-bit unsigned integer that indicates the
 	length of the entire extension field in octets, including any
-	Padding octets.</t>
+	Padding octets.  The bottom two bits of the Field Length SHOULD be zero.</t>
 
       <t>The Field Type contains the following sub-elements:</t>
       <t><figure title="Field Type Format">
-          <artwork name="Field TYpe Format"><![CDATA[
+          <artwork name="Field Type Format"><![CDATA[
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+-------------------------------+ 
-|R|E|O|I|   Code   Field Type   |       (Field Length)          |
+|R|E|O|I|EF Code     EF Type    |       (Field Length)          |
 +-------------------------------+-------------------------------+]]></artwork>
         </figure></t>
-      <t>Where:
+      <t>Where the following Field Type flags are defined:
       <list>
 	<t> R: 0 for a "Query", 1 for a "Response"</t>
 	<t> E: 0 for "OK", 1 for an "Error"</t>
@@ -319,36 +319,35 @@
 	<t> I: 0 for "MAC Not Included", 1 for "MAC Included"</t>
       </list></t>
 
-      <t>The Code subtype is currently only used
-	by <xref target="RFC5906">RFC 5906, Autokey</xref>.</t>
-
-      <t>[The proposed NTS specification would be a prime candidate to make
-	use of Code subtypes.]</t>
+      <t>[The EF Code subtype is currently only used
+	by <xref target="RFC5906">RFC 5906, Autokey</xref>.  The EF Code subtype is expected to be used by the NTS Extension Field, and the Extended Information Extension Field, at least.</t>
 
       <t>The Field Type, Value, and Padding fields are specific to the
-	defined function and are not elaborated here; the Field Type value
-	is defined in an IANA registry, and the Length, Value, and Padding
+	defined function and are not elaborated here; appropriate Field Type
+	flags, the EF Code, and EF Type values
+	are defined in an IANA registry, and the Length, Value, and Padding
 	values are defined by the document referred to by the registry.  If
 	a host receives an extension field with an unknown Field Type, the
 	host SHOULD ignore the extension field and MAY drop the packet
 	altogether if policy requires it.</t>
+
+      <t>The Length field is a 16-bit unsigned integer that indicates the
+	length of the entire extension field in octets, including any
+	Padding.</t>
 
       <t>While the minimum field length containing required fields is four
 	words (16 octets), the maximum field length MUST NOT be longer than
 	65532 octets due to the maximum size of the data represented by the
 	Length field, and SHOULD be small enough that the size of the NTP
 	packet received by the client does not exceed the smallest MTU
-	between the sender and the recipient.</t>
-
-      <t>The Length field is a 16-bit unsigned integer that indicates the
-	length of the entire extension field in octets, including any
-	Padding.</t>
+	between the sender and the recipient.  The bottom two bits of the
+	Field Length SHOULD be zero.</t>
       </section>
 
       <section title="NEW: 7.5.1 Extension Fields and MACs">
 	<t>With the inclusion of additional Extension Fields, there is now a
-	  possibility of an ambiguous parsing of a legacy MAC.  If an
-	  implementation offers even a modicum of care, there will be no
+	  possibility of an ambiguous parsing in the presence of a legacy MAC.
+	  If an implementation offers even a modicum of care, there will be no
 	  ambiguity when parsing an NTP packet that contains a legacy MAC.
 	</t>
 
@@ -452,6 +451,7 @@
 	  <t>0x8000: O: MAC Optional (0: MAC required, 1: MAC optional)</t>
 	  <t>0x8000: I: MAC Included (0: MAC not included, 1: MAC included)</t>
 	</list>
+      </t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
