@@ -39,7 +39,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-stenn-ntp-extension-fields-01" ipr="trust200902">
+<rfc category="std" docName="draft-stenn-ntp-extension-fields-02" ipr="trust200902">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -132,7 +132,7 @@
 
 <!-- other authors -->
 
-    <date month="August" year="2017"/>
+    <date month="September" year="2017"/>
 
     <!-- If the month and year are both specified and are the current ones,
          xml2rfc will fill in the current day for you. If only the current
@@ -188,6 +188,16 @@
 	field can be either a 4-octet crypto-NAK or data that is usually 20
 	or 24 octets long.</t>
 
+      <t>Additional information about the content of a MAC is specifieded in
+        <xref target="RFC5906">RFC 5906</xref>, but since that RFC is
+	Informational an implementor that was not planning to provide
+	Autokey would likely never read that document.  The result of this
+	would be interoperability problems, at least.  To address this
+	problem, this proposal also includes copying and clarifying some of
+	the content of RFC 5906 and putting it into RFC 5905.  Because
+	there is a reasonable chance RFC 5906 will be deprecated, this
+	document does not propose changes to RFC 5906.</t>
+
       <t>NTP extension fields are defined in <xref target="RFC5905">RFC
 	  5905</xref> as a generic mechanism that allows the addition of
 	future extensions and features without modifying the NTP header
@@ -229,6 +239,47 @@
       </section>
     </section>
 
+    <section title="NTP MAC - RFC 5906 Update">
+      <t>This document copies and updates some information
+      in <xref target="RFC5906">RFC 5906</xref> and puts it in to RFC 5905,
+      as follows:</t>
+
+      <section title="4. Autokey Cryptography">
+        <t>This section describes some of the cryptography aspects of
+        Autokey.  The third paragraph describes the use of 128- and 160-bit
+        message digests.  The enumeration of 128- and 160-bit message
+        digests is not meant to be limiting - other message digest lengths
+        MAY be implemented.  This paragraph also describes some of the
+        recommended semantic ranges of the key ID.  This information belongs
+        in RFC 5905.  The key ID ranges are particularly significant because
+        they provide addtional disambiguation protection when deciding if
+        the next data portion is either a legacy MAC or an Extension
+        Field.</t>
+      </section>
+
+      <section title="10. Autokey Protocol Messages">
+	<t>This section describes the Extension Field format, including
+	initial flag bits, a Code field, and 8-bit Field Type, and the
+	16-bit Length.  This proposal expands and clarifies this information
+	and puts it into RFC 5905.</t>
+
+	<t>This section says "The reference implementation discards any
+	packet with a field length of more than 1024 characters." but this
+	is no longer true.</t>
+      </section>
+
+      <section title="11.5. Error Recovery">
+	<t>This section describes the crypto-NAK, which should be described
+	in RFC 5905.</t>
+      </section>
+
+      <section title="13. IANA Consideration">
+        <t>This section lists the Autokey-related Extension Field Types,
+        including Flag Bits, Codes, and Field Types, which should be
+        described in RFC 5905, or perhaps in some other document.</t>
+      </section>
+    </section>
+      
     <section title="NTP Extension Fields - RFC 5905 Update">
       <t>This document updates Section 7.5 of <xref target="RFC5905">RFC
 	  5905</xref> as follows:</t>
@@ -300,7 +351,8 @@
 
       <t>The Length field is a 16-bit unsigned integer that indicates the
 	length of the entire extension field in octets, including any
-	Padding octets.  The bottom two bits of the Field Length SHOULD be zero.</t>
+	Padding octets.  The bottom two bits of the Field Length SHOULD be
+	zero.</t>
 
       <t>The Field Type contains the following sub-elements:</t>
       <t><figure title="Field Type Format">
@@ -320,16 +372,18 @@
       </list></t>
 
       <t>[The EF Code subtype is currently only used
-	by <xref target="RFC5906">RFC 5906, Autokey</xref>.  The EF Code subtype is expected to be used by the NTS Extension Field, and the Extended Information Extension Field, at least.</t>
+	by <xref target="RFC5906">RFC 5906, Autokey</xref>.  The EF Code
+	subtype is expected to be used by the NTS Extension Field, and the
+	Extended Information Extension Field, at least.]</t>
 
       <t>The Field Type, Value, and Padding fields are specific to the
 	defined function and are not elaborated here; appropriate Field Type
-	flags, the EF Code, and EF Type values
-	are defined in an IANA registry, and the Length, Value, and Padding
-	values are defined by the document referred to by the registry.  If
-	a host receives an extension field with an unknown Field Type, the
-	host SHOULD ignore the extension field and MAY drop the packet
-	altogether if policy requires it.</t>
+	flags, the EF Code, and EF Type values are defined in an IANA
+	registry, and the Length, Value, and Padding values are defined by
+	the document referred to by the registry.  If a host receives an
+	extension field with an unknown Field Type, the host SHOULD ignore
+	the extension field and MAY drop the packet altogether if policy
+	requires it.</t>
 
       <t>The Length field is a 16-bit unsigned integer that indicates the
 	length of the entire extension field in octets, including any
@@ -348,8 +402,23 @@
 	<t>With the inclusion of additional Extension Fields, there is now a
 	  possibility of an ambiguous parsing in the presence of a legacy MAC.
 	  If an implementation offers even a modicum of care, there will be no
-	  ambiguity when parsing an NTP packet that contains a legacy MAC.
+	  ambiguity when parsing an NTP packet that contains a legacy MAC
+	  from an existing implementation.
 	</t>
+
+	<t>The first protection from this ambiguity comes from the fact that
+	  current conforming implementations only support the Autokey EF,
+	  which uses EF Type 2 and a legacy MAC.  While the Experimental UDP
+	  Checksum Complement specified by <xref target="RFC7821">RFC
+	  7821</xref> uses EF Type 5, it specifically prohibits the use of a
+	  MAC, and the 0x2000 bit in its assigned EF type of 0x2005
+	  specifies that a MAC is optional when this EF is provided.</t>
+
+	<t>[As a side note, the requirement in <xref target="RFC7821">RFC
+	7821</xref> that the UDP Checksum Complement EF must have a 28 octet
+	length is demonstrably not needed if this proposal is accepted.  It
+	only needs 8 octets: 4 octets of EF header, 2 octets of MBZ padding,
+	and 2  octets of Checksum Complement.]</t>
 
 	<t>If an implementation uses the LAST-EF extension field, the
 	  presence of this field means "I am the last EF in this NTP Packet.
@@ -394,7 +463,7 @@
 	  may be another size, depending on the digest algorithm.  In the
 	  Reference Implementation, a Key Identifier between 1 and 65535,
 	  inclusive, is a symmetric key, while a Key Identifier that is >
-	  65535 is an Autokey <xref target="RFC5905">RFC 5905</xref>, or
+	  65535 is an Autokey <xref target="RFC5906">RFC 5906</xref>, or
 	  similar.  If the receiving system does not recognize the Key
 	  Identifier, the data CANNOT be a valid legacy MAC.  If the
 	  receiving system recognizes the Key Identifier, then it also has
@@ -430,6 +499,15 @@
 	<t>Note well that this rare situation can be completely avoided by
 	  using LAST-EF, or by indicating that no legacy MAC will be
 	  used.</t>
+	<section title="Legacy MAC/EF Parsing Pseudocode">
+	  <t>Here are two potential pseudocode implementations showing how
+	    data after the base NTP packet could be analyzed to identify EFs
+	    and a possible legacy MAC.</t>
+
+	  <t>[Example 1: high-level parsing algorithm]</t>
+
+	  <t>[Example 2: the pseudocode Harlan sent to Tal and Danny]</t>
+	</section>
       </section>
     </section>
 
