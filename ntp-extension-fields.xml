@@ -361,7 +361,7 @@
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+-------------------------------+ 
-|R|E|O|I|EF Code     EF Type    |       (Field Length)          |
+|R|E|O|I|  Code |       Type    |       (Field Length)          |
 +-------------------------------+-------------------------------+]]></artwork>
         </figure></t>
       <t>Where the following Field Type flags are defined:
@@ -688,10 +688,78 @@ if (leg_mac < 0) {
 	<list>
 	  <t>0x8000: R: Response (0: Request, 1: Response)</t>
 	  <t>0x4000: E: Error (0: OK, 1: Error)</t>
-	  <t>0x8000: O: MAC Optional (0: MAC required, 1: MAC optional)</t>
-	  <t>0x8000: I: MAC Included (0: MAC not included, 1: MAC included)</t>
+	  <t>0x2000: O: MAC Optional (0: MAC required, 1: MAC optional)</t>
+	  <t>0x1000: I: MAC Included (0: MAC not included, 1: MAC included)</t>
 	</list>
       </t>
+
+      <t>The following table should be the same as the existing NTP
+      Extension Field Table, reformatted to account for the new flag
+      bits.</t>
+ 
+      <t><figure title="Current Extension Field Allocations">
+          <artwork name="Current Extension Field Allocations"><![CDATA[
+ 0           1
+ 0123 4567 89012345   What:
++----+----+--------+
+|REOI|Code|  Type  |
++----+----+--------+
+|0000|  0 |     0  |  crypto-NAK (with Field Length of 0)
+|    |    |     0  |  RESERVED: Permanently Unassigned
++----+----+--------+
+|    |    |     1  |  RESERVED: Unassigned
++----+----+--------+
+|0000|  0 |     2  |  Autokey: No-Operation Request
+|1000|  0 |     2  |  Autokey: No-Operation Response
+|1100|  0 |     2  |  Autokey: No-Operation Error Response
++----+----+--------+
+|0000|  1 |     2  |  Autokey: Association Message Request
+|1000|  1 |     2  |  Autokey: Association Message Response
+|1100|  1 |     2  |  Autokey: Association Message Error Response
++----+----+--------+
+|0000|  2 |     2  |  Autokey: Certificate Message Request
+|1000|  2 |     2  |  Autokey: Certificate Message Response
+|1100|  2 |     2  |  Autokey: Certificate Message Error Response
++----+----+--------+
+|0000|  3 |     2  |  Autokey: Cookie Message Request
+|1000|  3 |     2  |  Autokey: Cookie Message Response
+|1100|  3 |     2  |  Autokey: Cookie Message Error Response
++----+----+--------+
+|0000|  4 |     2  |  Autokey: Autokey Message Request
+|1000|  4 |     2  |  Autokey: Autokey Message Response
+|1100|  4 |     2  |  Autokey: Autokey Message Error Response
++----+----+--------+
+|0000|  5 |     2  |  Autokey: Leapseconds Value Message Request
+|1000|  5 |     2  |  Autokey: Leapseconds Value Message Response
+|1100|  5 |     2  |  Autokey: Leapseconds Value Message Error Response
++----+----+--------+
+|0000|  6 |     2  |  Autokey: Sign Message Request
+|1000|  6 |     2  |  Autokey: Sign Message Response
+|1100|  6 |     2  |  Autokey: Sign Message Error Response
++----+----+--------+
+|0000|  7 |     2  |  Autokey: IFF Identity Message Request
+|1000|  7 |     2  |  Autokey: IFF Identity Message Response
+|1100|  7 |     2  |  Autokey: IFF Identity Message Error Response
++----+----+--------+
+|0000|  8 |     2  |  Autokey: GQ Identity Message Request
+|1000|  8 |     2  |  Autokey: GQ Identity Message Response
+|1100|  8 |     2  |  Autokey: GQ Identity Message Error Response
++----+----+--------+
+|0000|  9 |     2  |  Autokey: MV Identity Message Request
+|1000|  9 |     2  |  Autokey: MV Identity Message Response
+|1100|  9 |     2  |  Autokey: MV Identity Message Error Response
++----+----+--------+
+|0010|  0 |     5  |  Checksum Complement
++----+----+--------+
+]]></artwork>
+        </figure></t>
+      <t>Where the following Field Type flags are defined:
+      <list>
+	<t> R: 0 for a "Query", 1 for a "Response"</t>
+	<t> E: 0 for "OK", 1 for an "Error"</t>
+	<t> O: 0 for "MAC Required", 1 for "MAC Optional"</t>
+	<t> I: 0 for "MAC Not Included", 1 for "MAC Included"</t>
+      </list></t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
