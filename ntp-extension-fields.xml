@@ -164,7 +164,8 @@
     <abstract>
       <t> Network Time Protocol version 4 (NTPv4) defines the optional usage
 	of extension fields.  An extension field, as defined
-	in <xref target="RFC5905">RFC 5905</xref>, resides after the end of
+	in <xref target="RFC5905">RFC 5905</xref>
+	and <xref target="RFC5906">RFC 5906</xref>, resides after the end of
 	the NTP header, and supplies optional capabilities or information
 	that is not conveyed in the standard NTP header.  This document
 	updates <xref target="RFC5905">RFC 5905</xref> by clarifying some
@@ -215,9 +216,9 @@
 	clarify the rules around MACs, but with the adoption of this
 	proposal the authors recommend rescinding [Err3627].</t>
 
-      <t>This document better specifies and clarifies both Extention Fields
-	and the requirements and parsing of a legacy MAC, with changes to
-	address errors found after the publication
+      <t>This document better specifies and clarifies extension fields as
+	well as the requirements and parsing of a legacy MAC, with changes
+	to address errors found after the publication
 	of <xref target="RFC5905">RFC 5905</xref> with respect to extension
 	fields.  Specifically, this document updates Section 7.5
 	of <xref target="RFC5905">RFC 5905</xref>, clarifying the
@@ -232,6 +233,7 @@
           in this document are to be interpreted as described
           in <xref target="RFC2119">RFC 2119</xref>.</t>
       </section>
+
       <section title="Terms and Abbreviations">
         <t>MAC - Message Authentication Code</t>
 	<t>NTPv4 - Network Time Protocol, Version
@@ -241,42 +243,42 @@
 
     <section title="NTP MAC - RFC 5906 Update">
       <t>This document copies and updates some information
-      in <xref target="RFC5906">RFC 5906</xref> and puts it in to RFC 5905,
-      as follows:</t>
+	in <xref target="RFC5906">RFC 5906</xref> and puts it in to RFC
+	5905, as follows:</t>
 
       <section title="4. Autokey Cryptography">
         <t>This section describes some of the cryptography aspects of
-        Autokey.  The third paragraph describes the use of 128- and 160-bit
-        message digests.  The enumeration of 128- and 160-bit message
-        digests is not meant to be limiting - other message digest lengths
-        MAY be implemented.  This paragraph also describes some of the
-        recommended semantic ranges of the key ID.  This information belongs
-        in RFC 5905.  The key ID ranges are particularly significant because
-        they provide addtional disambiguation protection when deciding if
-        the next data portion is either a legacy MAC or an Extension
-        Field.</t>
+          Autokey.  The third paragraph describes the use of 128- and
+          160-bit message digests.  The enumeration of 128- and 160-bit
+          message digests is not meant to be limiting - other message digest
+          lengths MAY be implemented.  This paragraph also describes some of
+          the recommended semantic ranges of the key ID.  This information
+          belongs in RFC 5905.  The key ID ranges are particularly
+          significant because they provide addtional disambiguation
+          protection when deciding if the next data portion is either a
+          legacy MAC or an extension field.</t>
       </section>
 
       <section title="10. Autokey Protocol Messages">
-	<t>This section describes the Extension Field format, including
-	initial flag bits, a Code field, and 8-bit Field Type, and the
-	16-bit Length.  This proposal expands and clarifies this information
-	and puts it into RFC 5905.</t>
+	<t>This section describes the extension field format, including
+	  initial flag bits, a Code field, and 8-bit Field Type, and the
+	  16-bit Length.  This proposal expands and clarifies this
+	  information and puts it into RFC 5905.</t>
 
 	<t>This section says "The reference implementation discards any
-	packet with a field length of more than 1024 characters." but this
-	is no longer true.</t>
+	  packet with a field length of more than 1024 characters." but this
+	  is no longer true.</t>
       </section>
 
       <section title="11.5. Error Recovery">
 	<t>This section describes the crypto-NAK, which should be described
-	in RFC 5905.</t>
+	  in RFC 5905.</t>
       </section>
 
       <section title="13. IANA Consideration">
         <t>This section lists the Autokey-related Extension Field Types,
-        including Flag Bits, Codes, and Field Types, which should be
-        described in RFC 5905, or perhaps in some other document.</t>
+          including Flag Bits, Codes, and Field Types, which should be
+          described in RFC 5905, or perhaps in some other document.</t>
       </section>
     </section>
       
@@ -344,10 +346,9 @@
       <t>All extension fields are zero-padded to a word (four octet)
 	boundary.  The Field Type is specific to the defined function and
 	detailed information about the Field Type is not elaborated here.
-	While the minimum extension field is a 32-bit word (4 octets), the
-	minimum length of an extension field is usually four 32-bit words
-	(16 octets), and while a maximum extension field size MUST be 65532
-	octets or less, an NTP packet SHOULD NOT exceed the network MTU.</t>
+	The minimum size of an Extension Field is a 32-bit word (4 octets),
+	and while the maximum extension field size MUST be 65532 octets or
+	less, an NTP packet SHOULD NOT exceed the network MTU.</t>
 
       <t>The Length field is a 16-bit unsigned integer that indicates the
 	length of the entire extension field in octets, including any
@@ -504,10 +505,171 @@
 	    data after the base NTP packet could be analyzed to identify EFs
 	    and a possible legacy MAC.</t>
 
-	  <t>[Example 1: high-level parsing algorithm]</t>
+	  <t>Example 1: Generate a list of possible parsings:</t>
+          <t><figure title="Example 1: Generate a list of possible
+          parsings">
+	      <artwork name="Generate a list of possible parsings"><![CDATA[
+struct pkt_parse {
+ foo * ef_ptr;
+ foo * legacy_mac;
+ struct pkt_parse * next;
+};
 
-	  <t>[Example 2: the pseudocode Harlan sent to Tal and Danny]</t>
+struct pkt_parse pkt_parse_chain = NULL;
+
+EOPacket = address of last data in packet;
+here = address of the EOBasePacket;
+more_efs = 1;
+while (1) {
+    int candidate = 0;
+    int ef_len = 0;
+
+    if (EOPacket > here) {
+        p = emalloc(pkt_parse);			// assumes p is "cleared" data
+        if (this could be a legacy MAC) {	// we know the keyid
+            p->legacy_mac = here;
+            candidate = 1;
+        }
+        if (more_efs && this could be an EF) {	// ie length field valid
+            p->ef_ptr = here;
+            ef_len = (the length of the EF);
+            here += ef_len;
+            if (this is a LAST_EF) {
+                more_efs = 0;
+            }
+            candidate = 1;
+        } else {
+            more_efs = 0;
+        }
+    }
+
+    if (candidate) {
+        p->next = pkt_parse_chain;
+        pkt_parse_chain = p;
+    } else {
+        free(p);
+        break;
+    }
+}]]></artwork></figure></t>
+
+	  <t>and at this point we can scan thru the items in pkt_parse_chain to
+	    do deeper checks, throwing away the parsings that don't make
+	    sense.</t>
+
+	  <t>This opens up more questions if we get multiple parsings and at
+	    least 1 of them is "valid".  It's also perfectly reasonable to
+	    decide to produce a single parse based on precedence rules:
+	    Prefer legacy MAC, or prefer EF.</t>
+
+	  <t>Example 2: Another possible way to handle EF/legacy-MAC parsing:</t>
+
+          <t><figure title="Example 2: Another possible way to handle
+			    EF/legacy-MAC parsing">
+	      <artwork><![CDATA[
+// We're at the end of the base NTP packet.
+// A legacy MAC is allowed:
+// - immediately after the base packet
+// - immediately after one or more Autokey EFs(a non-issue, below)
+// - immediately after a LAST-EF
+
+ef_ok = 1;				// an EF is allowed here
+legacy_mac_ok = 1;			// A legacy MAC is allowed here
+req_mac = 0;				// A MAC is not required
+saw_mac = 0;				// We haven't seen a MAC yet
+authlen = LEN_PKT_NOMAC;		// Length of a base packet
+leg_mac = rbufp->recv_length - authlen;	// # bytes after base
+
+while (leg_mac > 0) {			// There is more stuff after the base packet
+	if (leg_mac % 4 != 0 || leg_mac < MIN_MAC_LEN) {
+		return: Bad packet length;
+	}
+
+	// If ef_ok, this could be an EF or legacy MAC
+	skeyid = ntohl(pkt[authlen / 4];
+	opcode = skeyid >> 16;
+	len = skeyid & 0xffff;
+
+	if (ef_ok && GET_EXT_FIELD_TYPE(opcode) == EF_FT_LAST) {
+		if (leg_mac > MAX_MAC_LEN) {
+			return: Too much data after LAST_EF;
+		}
+		// Anything here MUST be a legacy MAC
+		ef_ok = 0;
+		legacy_mac_ok = 1;
+	} else {
+		if (4 == leg_mac && 0 == skeyid) {
+			break;// Likely crypto-NAK
+		}
+
+		if (legacy_mac_ok && leg_mac <= MAX_MAC_LEN) {
+			int ksize;
+
+			// From above: skeyid = ntohl(pkt[authlen / 4]);
+
+			// If we find the keyid, we know its alg/length
+			ksize = auth_findkeysize(skeyid);
+			if (ksize != -1) {
+				saw_mac = 1;
+				break;
+			}
+			// If we didn't find it, this can't be a valid
+			// legacy MAC.  It's still a potential EF.
+		}
+
+		if (!ef_ok) {
+			break;
+		}
+
+		// At this point, this SHOULD be an EF
+
+		if (   len % 4 != 0
+		    || len < 4
+		    || len + authlen > rbufp-> recv_length) {
+			return: Bad length;
+		}
+
+		if (opcode & EF_FL_reoI) {	// EF contains MAC
+			saw_mac = 1;		// Just a hint
+		}
+		if (opcode & EF_FL_reOi) {	// MAC optional
+		} else {
+			req_mac = 1;	// MAC required
+		}
+		switch (GET_EXT_FIELD_TYPE(opcode)) {
+		case EF_FT_AK:		// Autokey
+			// extract calling group name for later
+			break;
+		case EF_FT_LAST:	// LAST-EF
+			legacy_mac_ok = 1;
+			break;
+		default:
+			legacy_mac_ok = 0;
+			break;
+		}
+	}
+
+	authlen += len;
+	leg_mac -= len;
+}
+
+if (leg_mac < 0) {
+	return: Malformed packet
+}]]></artwork></figure></t>
 	</section>
+      </section>
+
+      <section title="OLD: 9.2. Peer Process Operations">
+	<t>...</t>
+	<t>FXMIT. ... This message includes the normal NTP header data shown
+	  in Figure 8, but with a MAC consisting of four octets of zeros. ...</t>
+      </section>
+
+      <section title="NEW: 9.2. Peer Process Operations">
+	<t>...</t>
+	<t>FXMIT. ... This message includes the normal NTP header data shown
+	  in Figure 8, but with a MAC consisting of four octets of zeros.
+	  This can be a legacy MAC or a MAC-EF.  If it's a MAC-EF, the
+	  crypto-NAK MUST be the only MAC in the MAC-EF payload.  ...</t>
       </section>
     </section>
 
