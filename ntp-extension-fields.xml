@@ -753,13 +753,6 @@ if (leg_mac < 0) {
 +----+----+--------+
 ]]></artwork>
         </figure></t>
-      <t>Where the following Field Type flags are defined:
-      <list>
-	<t> R: 0 for a "Query", 1 for a "Response"</t>
-	<t> E: 0 for "OK", 1 for an "Error"</t>
-	<t> O: 0 for "MAC Required", 1 for "MAC Optional"</t>
-	<t> I: 0 for "MAC Not Included", 1 for "MAC Included"</t>
-      </list></t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
