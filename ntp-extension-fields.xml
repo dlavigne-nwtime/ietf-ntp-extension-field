@@ -189,7 +189,7 @@
         field can be either a 4-octet crypto-NAK or data that is usually 20
         or 24 octets long.</t>
 
-      <t>Additional information about the content of a MAC is specifieded in
+      <t>Additional information about the content of a MAC is specified in
         <xref target="RFC5906">RFC 5906</xref>, but since that RFC is
         Informational an implementor that was not planning to provide
         Autokey would likely never read that document.  The result of this
