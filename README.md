@@ -1,4 +1,4 @@
-# ietf-ntp-extension-field
+# ietf-ntp-extension-fields, the replacement for rfc7822.
 
 If you want to see how the document looks when submitted to xml2rfc.tools.ietf.org, just click this link:
 
