@@ -525,12 +525,12 @@ while (1) {
     int ef_len = 0;
 
     if (EOPacket > here) {
-        p = emalloc(pkt_parse);                 // assumes p is "cleared" data
+        p = emalloc(pkt_parse);                 // *p is zeroed
         if (this could be a legacy MAC) {       // we know the keyid
             p->legacy_mac = here;
             candidate = 1;
         }
-        if (more_efs && this could be an EF) {  // ie length field valid
+        if (more_efs && this could be an EF) {  // Length field valid
             p->ef_ptr = here;
             ef_len = (the length of the EF);
             here += ef_len;
@@ -552,8 +552,8 @@ while (1) {
     }
 }]]></artwork></figure></t>
 
-          <t>and at this point we can scan thru the items in pkt_parse_chain to
-            do deeper checks, throwing away the parsings that don't make
+          <t>and at this point we can scan thru the items in pkt_parse_chain
+            to do deeper checks, throwing away the parsings that don't make
             sense.</t>
 
           <t>This opens up more questions if we get multiple parsings and at
@@ -561,9 +561,10 @@ while (1) {
             decide to produce a single parse based on precedence rules:
             Prefer legacy MAC, or prefer EF.</t>
 
-          <t>Example 2: Another possible way to handle EF/legacy-MAC parsing:</t>
+          <t>Example 2: Another possible way to handle EF/legacy-MAC
+            parsing:</t>
 
-          <t><figure title="Example 2: Another possible way to handle
+          <t><figure title="Example 2: Another way to handle
                             EF/legacy-MAC parsing">
               <artwork><![CDATA[
 // We're at the end of the base NTP packet.
@@ -572,14 +573,14 @@ while (1) {
 // - immediately after one or more Autokey EFs(a non-issue, below)
 // - immediately after a LAST-EF
 
-ef_ok = 1;                              // an EF is allowed here
-legacy_mac_ok = 1;                      // A legacy MAC is allowed here
+ef_ok = 1;                              // An EF is allowed here
+legacy_mac_ok = 1;                      // Legacy MAC allowed here
 req_mac = 0;                            // A MAC is not required
 saw_mac = 0;                            // We haven't seen a MAC yet
 authlen = LEN_PKT_NOMAC;                // Length of a base packet
 leg_mac = rbufp->recv_length - authlen; // # bytes after base
 
-while (leg_mac > 0) {                   // There is more stuff after the base packet
+while (leg_mac > 0) {                   // Data after base packet
         if (leg_mac % 4 != 0 || leg_mac < MIN_MAC_LEN) {
                 return: Bad packet length;
         }
@@ -604,15 +605,13 @@ while (leg_mac > 0) {                   // There is more stuff after the base pa
                 if (legacy_mac_ok && leg_mac <= MAX_MAC_LEN) {
                         int ksize;
 
-                        // From above: skeyid = ntohl(pkt[authlen / 4]);
-
-                        // If we find the keyid, we know its alg/length
+                        // If we find a keyid, we know its alg/length
                         ksize = auth_findkeysize(skeyid);
                         if (ksize != -1) {
                                 saw_mac = 1;
                                 break;
                         }
-                        // If we didn't find it, this can't be a valid
+                        // If we didn't find it, it can't be a valid
                         // legacy MAC.  It's still a potential EF.
                 }
 
@@ -661,7 +660,8 @@ if (leg_mac < 0) {
       <section title="OLD: 9.2. Peer Process Operations">
         <t>...</t>
         <t>FXMIT. ... This message includes the normal NTP header data shown
-          in Figure 8, but with a MAC consisting of four octets of zeros. ...</t>
+          in Figure 8, but with a MAC consisting of four octets of
+          zeros. ...</t>
       </section>
 
       <section title="NEW: 9.2. Peer Process Operations">
@@ -697,8 +697,8 @@ if (leg_mac < 0) {
       Extension Field Table, reformatted to account for the new flag
       bits.</t>
  
-      <t><figure title="Current Extension Field Allocations">
-          <artwork name="Current Extension Field Allocations"><![CDATA[
+      <t><figure title="Current Extension Fields">
+          <artwork name="Current Extension Fields"><![CDATA[
  0           1
  0123 4567 89012345   What:
 +----+----+--------+
@@ -731,7 +731,7 @@ if (leg_mac < 0) {
 +----+----+--------+
 |0000|  5 |     2  |  Autokey: Leapseconds Value Message Request
 |1000|  5 |     2  |  Autokey: Leapseconds Value Message Response
-|1100|  5 |     2  |  Autokey: Leapseconds Value Message Error Response
+|1100|  5 |     2  |  Autokey: Leapseconds Value Msg Error Response
 +----+----+--------+
 |0000|  6 |     2  |  Autokey: Sign Message Request
 |1000|  6 |     2  |  Autokey: Sign Message Response
