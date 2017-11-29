@@ -221,7 +221,7 @@
         MAC protection, added an express limit to the length of a MAC, and
         required that all EFs be at least 28 octets long.  Requiring EFs to
         be at least 28 octets long is needlessly wasteful.</t>
-	  
+  
       <t>This proposal codifies existing and proposed behavior of the NTP
         reference implementation in that it describes a simple and clean way
         to identify the rare case that an extension field would not require
@@ -663,7 +663,7 @@ while (leg_mac > 0) {                   // Data after base packet
                         saw_mac = 1;            // Just a hint
                 }
                 if (opcode & EF_FL_reOi) {      // MAC optional
-			// Empty
+                        // Empty
                 } else {
                         req_mac = 1;    // MAC required
                 }
