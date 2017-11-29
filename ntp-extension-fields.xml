@@ -216,11 +216,16 @@
         the NTPv4 specification must be made.</t>
 
       <t><xref target="RFC7822">RFC 7822</xref> was an attempt to clarify
-        the rules around MACs, but in doing so, it completely removed the
-        long-standing rule that the presence of an extension field required
-        MAC protection, added an express limit to the length of a MAC, and
-        required that all EFs be at least 28 octets long.  Requiring EFs to
-        be at least 28 octets long is needlessly wasteful.</t>
+        and change the rules around MACs, but in doing so, it completely
+        removed the long-standing rule that the presence of an extension
+        field required MAC protection, added an express limit to the length
+        of a MAC, and required that all EFs be at least 28 octets long.
+        Pushing the decision about whether or not a packet must be
+        authenticated later in the process reduces throughput performance
+        and opens NTP up to clogging attacks.  Expressly limiting the length
+        of a MAC prohibits the use of longer MACs, should that ever be
+        needed.  Requiring EFs to be at least 28 octets long is needlessly
+        wasteful.</t>
   
       <t>This proposal codifies existing and proposed behavior of the NTP
         reference implementation in that it describes a simple and clean way
