@@ -8,6 +8,7 @@
 <!ENTITY RFC5905 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5905.xml">
 <!ENTITY RFC5906 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5906.xml">
 <!ENTITY RFC7821 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7821.xml">
+<!ENTITY RFC7822 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7822.xml">
 <!ENTITY RFC2827 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2827.xml">
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC2434 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2434.xml">
