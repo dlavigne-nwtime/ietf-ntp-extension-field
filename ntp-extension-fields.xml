@@ -132,7 +132,7 @@
 
 <!-- other authors -->
 
-    <date month="September" year="2017"/>
+    <date month="November" year="2017"/>
 
     <!-- If the month and year are both specified and are the current ones,
          xml2rfc will fill in the current day for you. If only the current
@@ -173,14 +173,14 @@
         Message Authentication Codes (MACs).</t>
 
       <t>With the adoption of this update, the authors recommend rescinding
-        [Err3627].</t>
+        <xref target="RFC7822">RFC 7822</xref>.</t>
     </abstract>
   </front>
 
   <middle>
     <section title="Introduction">
       <t>The NTP header format consists of a set of fixed fields that may be
-        followed by optional fields.  Two types of optional fields are
+        followed by optional fields (EFs).  Two types of optional fields are
         defined: extension fields as defined in Section 7.5
         of <xref target="RFC5905">RFC 5905</xref>, and legacy Message
         Authentication Codes (legacy MACs).</t>
@@ -204,17 +204,32 @@
         future extensions and features without modifying the NTP header
         format (Section 16 of <xref target="RFC5905">RFC 5905</xref>).</t>
 
-      <t>Section 7.5 of <xref target="RFC5905">RFC 5905</xref> clearly
-        states that "one or more extension fields can be inserted after
-        the header and before the MAC, which is always present when an
+      <t>Section 7.5 of <xref target="RFC5905">RFC 5905</xref> has always
+        clearly stated that "one or more extension fields can be inserted
+        after the header and before the MAC, which is always present when an
         extension field is present."  However, the experimental Checksum
         Complement <xref target="RFC7821">RFC 7821</xref> cannot be used if
         the NTP packet contains a MAC.</t>
 
       <t>To allow for extension fields that do not require a MAC, changes to
-        the NTPv4 specification must be made.  [Err3627] was an attempt to
-        clarify the rules around MACs, but with the adoption of this
-        proposal the authors recommend rescinding [Err3627].</t>
+        the NTPv4 specification must be made.</t>
+
+      <t><xref target="RFC7822">RFC 7822</xref> was an attempt to clarify
+        the rules around MACs, but in doing so, it completely removed the
+        long-standing rule that the presence of an extension field required
+        MAC protection, added an express limit to the length of a MAC, and
+        required that all EFs be at least 28 octets long.  Requiring EFs to
+        be at least 28 octets long is needlessly wasteful.</t>
+	  
+      <t>This proposal codifies existing and proposed behavior of the NTP
+        reference implementation in that it describes a simple and clean way
+        to identify the rare case that an extension field would not require
+        a MAC, allows EFs to be on 4-octet boundaries of any acceptable
+        length, and provides methods to disambiguate packet parsing in the
+        rare case where an implementation would choose to send a packet that
+        could be ambiguously parsed.  With the adoption of this proposal the
+        authors recommend rescinding <xref target="RFC7822">RFC
+        7822</xref>.</t>
 
       <t>This document better specifies and clarifies extension fields as
         well as the requirements and parsing of a legacy MAC, with changes
@@ -222,8 +237,9 @@
         of <xref target="RFC5905">RFC 5905</xref> with respect to extension
         fields.  Specifically, this document updates Section 7.5
         of <xref target="RFC5905">RFC 5905</xref>, clarifying the
-        relationship between extension fields and MACs, and defines the
-        behavior of a host that receives an unknown extension field.</t>
+        relationship between extension fields and MACs, and expressly
+        defines the behavior of a host that receives an unknown extension
+        field.</t>
     </section>
 
     <section title="Conventions Used in This Document">
@@ -253,10 +269,10 @@
           message digests is not meant to be limiting - other message digest
           lengths MAY be implemented.  This paragraph also describes some of
           the recommended semantic ranges of the key ID.  This information
-          belongs in RFC 5905.  The key ID ranges are particularly
-          significant because they provide addtional disambiguation
-          protection when deciding if the next data portion is either a
-          legacy MAC or an extension field.</t>
+          belongs in RFC 5905.  The key ID value is particularly significant
+          because it provide additional disambiguation protection when
+          deciding if the next data portion is either a legacy MAC or an
+          extension field.</t>
       </section>
 
       <section title="10. Autokey Protocol Messages">
@@ -353,7 +369,8 @@
       <t>The Length field is a 16-bit unsigned integer that indicates the
         length of the entire extension field in octets, including any
         Padding octets.  The bottom two bits of the Field Length SHOULD be
-        zero.</t>
+        zero, and the size of the extension field SHOULD end on a 32-bit (4
+        octet) boundary.</t>
 
       <t>The Field Type contains the following sub-elements:</t>
       <t><figure title="Field Type Format">
@@ -372,10 +389,21 @@
         <t> I: 0 for "MAC Not Included", 1 for "MAC Included"</t>
       </list></t>
 
-      <t>[The EF Code subtype is currently only used
+      <t>[The 'R' flag is currently used by Autokey, and by the proposed
+      I-DO extension field.]</t>
+
+      <t>[The 'E' flag is currently used by Autokey.]</t>
+
+      <t>[The 'O' flag is used by <xref target="RFC7821">RFC
+          7821</xref>, the I-DO, and the LAST-EF proposal.]</t>
+
+      <t>[The 'I' flag is used by the MAC-EF proposal, and would be used by
+	any EF proposal that includes a MAC in its data.]</t>
+
+      <t>[The EF Code subtype is currently used
         by <xref target="RFC5906">RFC 5906, Autokey</xref>.  The EF Code
-        subtype is expected to be used by the NTS Extension Field, and the
-        Extended Information Extension Field, at least.]</t>
+        subtype is used by the Extended Information EF proposal, and is
+        expected to be used by the NTS Extension Field, at least.]</t>
 
       <t>The Field Type, Value, and Padding fields are specific to the
         defined function and are not elaborated here; appropriate Field Type
@@ -383,8 +411,8 @@
         registry, and the Length, Value, and Padding values are defined by
         the document referred to by the registry.  If a host receives an
         extension field with an unknown Field Type, the host SHOULD ignore
-        the extension field and MAY drop the packet altogether if policy
-        requires it.</t>
+        the extension field and MAY drop the packet altogether, depending on
+        local policy.</t>
 
       <t>The Length field is a 16-bit unsigned integer that indicates the
         length of the entire extension field in octets, including any
@@ -396,7 +424,8 @@
         Length field, and SHOULD be small enough that the size of the NTP
         packet received by the client does not exceed the smallest MTU
         between the sender and the recipient.  The bottom two bits of the
-        Field Length SHOULD be zero.</t>
+        Field Length SHOULD be zero and the EF data SHOULD be aligned to a
+        32-bit (4 octet) boundary.</t>
       </section>
 
       <section title="NEW: 7.5.1 Extension Fields and MACs">
@@ -412,14 +441,15 @@
           which uses EF Type 2 and a legacy MAC.  While the Experimental UDP
           Checksum Complement specified by <xref target="RFC7821">RFC
           7821</xref> uses EF Type 5, it specifically prohibits the use of a
-          MAC, and the 0x2000 bit in its assigned EF type of 0x2005
-          specifies that a MAC is optional when this EF is provided.</t>
+          MAC, and the 0x2000 bit in its assigned EF specification of 0x2005
+          signifies that a MAC is optional when this EF is provided.</t>
 
         <t>[As a side note, the requirement in <xref target="RFC7821">RFC
-        7821</xref> that the UDP Checksum Complement EF must have a 28 octet
-        length is demonstrably not needed if this proposal is accepted.  It
-        only needs 8 octets: 4 octets of EF header, 2 octets of MBZ padding,
-        and 2  octets of Checksum Complement.]</t>
+            7821</xref> that the UDP Checksum Complement EF must have a 28
+            octet length is demonstrably not needed if this proposal is
+            accepted.  It only needs 8 octets: 4 octets of EF header, 2
+            octets of must-be-zero padding, and 2 octets of Checksum
+            Complement.]</t>
 
         <t>If an implementation uses the LAST-EF extension field, the
           presence of this field means "I am the last EF in this NTP Packet.
@@ -447,7 +477,7 @@
               <list>
                 <t>First, the Field Length will be less than the remaining
                   data.  This means subsequent data must parse as some
-                  number of Extension Fields, optionally follwed by a legacy
+                  number of Extension Fields, optionally followed by a legacy
                   MAC.</t>
                 <t>Second, the Field Length will exactly match the
                   remaining data.</t>
@@ -500,6 +530,7 @@
         <t>Note well that this rare situation can be completely avoided by
           using LAST-EF, or by indicating that no legacy MAC will be
           used.</t>
+
         <section title="Legacy MAC/EF Parsing Pseudocode">
           <t>Here are two potential pseudocode implementations showing how
             data after the base NTP packet could be analyzed to identify EFs
@@ -586,7 +617,7 @@ while (leg_mac > 0) {                   // Data after base packet
         }
 
         // If ef_ok, this could be an EF or legacy MAC
-        skeyid = ntohl(pkt[authlen / 4];
+        skeyid = ntohl(pkt[authlen / 4]);
         opcode = skeyid >> 16;
         len = skeyid & 0xffff;
 
@@ -631,6 +662,7 @@ while (leg_mac > 0) {                   // Data after base packet
                         saw_mac = 1;            // Just a hint
                 }
                 if (opcode & EF_FL_reOi) {      // MAC optional
+			// Empty
                 } else {
                         req_mac = 1;    // MAC required
                 }
@@ -790,6 +822,8 @@ if (leg_mac < 0) {
       &RFC5906;
 
       &RFC7821;
+
+      &RFC7822;
     </references>
 
     <!-- Here we use entities that we defined at the beginning. -->
@@ -814,6 +848,7 @@ if (leg_mac < 0) {
 
 v02 2016-10-29  HMS: Updates
 v03 2018-08-21  HMS: Updates
-                                                                                        -->
+    2018-11-29  HMS: Err32whatever to RFC7822.  Expand on various reasonings.
+      -->
   </back>
 </rfc>
