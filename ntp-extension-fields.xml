@@ -181,8 +181,8 @@
   <middle>
     <section title="Introduction">
       <t>The NTP header format consists of a set of fixed fields that may be
-        followed by optional fields (EFs).  Two types of optional fields are
-        defined: extension fields as defined in Section 7.5
+        followed by optional fields.  Two types of optional fields are
+        defined: extension fields (EFs) as defined in Section 7.5
         of <xref target="RFC5905">RFC 5905</xref>, and legacy Message
         Authentication Codes (legacy MACs).</t>
 
