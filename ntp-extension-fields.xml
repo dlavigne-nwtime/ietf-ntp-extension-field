@@ -409,8 +409,8 @@
       <t>[The 'E' flag is currently used by Autokey.  This flag is used
       after the packet is accepted.]</t>
 
-      <t>[The 'O' flag is used by <xref target="RFC7821">RFC
-          7821</xref>, the I-DO, and the LAST-EF proposal.  This flag is
+      <t>[The 'O' flag is used by <xref target="RFC7821">RFC 7821</xref>,
+          the I-DO, SUGGEST-REFID, and the LAST-EF proposal.  This flag is
           used during the initial packet analysis.]</t>
 
       <t>[The 'I' flag is used by the MAC-EF proposal, and would be used by
