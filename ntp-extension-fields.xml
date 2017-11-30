@@ -377,7 +377,13 @@
         length of the entire extension field in octets, including any
         Padding octets.  The bottom two bits of the Field Length SHOULD be
         zero, and the size of the extension field SHOULD end on a 32-bit (4
-        octet) boundary.</t>
+        octet) boundary.  [RFC5905 Section 7.5 says "All extension fields
+        are zero-padded to a word (four octets) boundary." but does not use
+        'MUST' language.  Is it overkill to reiterate this requirement
+        here?  Should we use SHOULD or MUST regarding the bottom two bits
+        or the boundary of the EF?  It is possible, down the road, that we
+        might find some use for those bottom 2 bits, even if we require a
+        32-bit boundary on the last octet of an EF.]</t>
 
       <t>The Field Type contains the following sub-elements:</t>
       <t><figure title="Field Type Format">
