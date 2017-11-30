@@ -227,15 +227,15 @@
         needed.  Requiring EFs to be at least 28 octets long is needlessly
         wasteful.</t>
   
-      <t>This proposal codifies existing and proposed behavior of the NTP
+      <t>This proposal follows existing and proposed behavior of the NTP
         reference implementation in that it describes a simple and clean way
-        to identify the rare case that an extension field would not require
-        a MAC, allows EFs to be on 4-octet boundaries of any acceptable
-        length, and provides methods to disambiguate packet parsing in the
-        rare case where an implementation would choose to send a packet that
-        could be ambiguously parsed.  With the adoption of this proposal the
-        authors recommend rescinding <xref target="RFC7822">RFC
-        7822</xref>.</t>
+        to identify the case where an extension field must not have or would
+        not require a MAC, allows EFs to be on 4-octet boundaries of any
+        acceptable length, and provides methods to disambiguate packet
+        parsing in the unexpected case where an implementation would choose
+        to send a packet that could be ambiguously parsed.  With the
+        adoption of this proposal the authors recommend
+        rescinding <xref target="RFC7822">RFC 7822</xref>.</t>
 
       <t>This document better specifies and clarifies extension fields as
         well as the requirements and parsing of a legacy MAC, with changes
