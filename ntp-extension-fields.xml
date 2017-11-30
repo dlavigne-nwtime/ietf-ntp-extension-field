@@ -447,8 +447,9 @@
 
       <section title="NEW: 7.5.1 Extension Fields and MACs">
         <t>With the inclusion of additional Extension Fields, there is now a
-          possibility of an ambiguous parsing in the presence of a legacy MAC.
-          If an implementation offers even a modicum of care, there will be no
+          potential that a poorly-designed implementation would produce an
+          ambiguous parsing in the presence of a legacy MAC.  If an
+          implementation offers even a modicum of care, there will be no
           ambiguity when parsing an NTP packet that contains a legacy MAC
           from an existing implementation.
         </t>
