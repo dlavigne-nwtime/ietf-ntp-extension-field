@@ -397,15 +397,19 @@
       </list></t>
 
       <t>[The 'R' flag is currently used by Autokey, and by the proposed
-      I-DO extension field.]</t>
+      I-DO extension field.  This flag is used after the packet is
+      accepted.]</t>
 
-      <t>[The 'E' flag is currently used by Autokey.]</t>
+      <t>[The 'E' flag is currently used by Autokey.  This flag is used
+      after the packet is accepted.]</t>
 
       <t>[The 'O' flag is used by <xref target="RFC7821">RFC
-          7821</xref>, the I-DO, and the LAST-EF proposal.]</t>
+          7821</xref>, the I-DO, and the LAST-EF proposal.  This flag is
+          used during the initial packet analysis.]</t>
 
       <t>[The 'I' flag is used by the MAC-EF proposal, and would be used by
-	any EF proposal that includes a MAC in its data.]</t>
+	any EF proposal that includes a MAC in its data.  This flag is used
+	during the initial packet analysis.]</t>
 
       <t>[The EF Code subtype is currently used
         by <xref target="RFC5906">RFC 5906, Autokey</xref>.  The EF Code
