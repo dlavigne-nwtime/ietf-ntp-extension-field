@@ -257,6 +257,7 @@
       </section>
 
       <section title="Terms and Abbreviations">
+	<t>EF - Extension Fields</t>
         <t>MAC - Message Authentication Code</t>
         <t>NTPv4 - Network Time Protocol, Version
           4 <xref target="RFC5905">RFC 5905</xref></t>
