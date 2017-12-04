@@ -40,7 +40,8 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-stenn-ntp-extension-fields-02" ipr="trust200902">
+<rfc category="std" docName="draft-stenn-ntp-extension-fields-02"
+     ipr="trust200902" obsoletes="7822">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
      you can add the attributes updates="NNNN" and obsoletes="NNNN" 
@@ -59,6 +60,7 @@
 
     <!-- Another author who claims to be an editor -->
 
+    <!--
     <author fullname="Tal Mizrahi" initials="T." surname="Mizrahi">
       <organization>Marvell</organization>
 
@@ -80,7 +82,9 @@
         <email>talmi@marvell.com</email>
       </address>
     </author>
+    -->
 
+    <!--
     <author fullname="Danny Mayer" initials="D." surname="Mayer">
       <organization>Network Time Foundation</organization>
 
@@ -104,6 +108,7 @@
         <email>mayer@ntp.org</email>
       </address>
     </author>
+    -->
 
     <author fullname="Harlan Stenn" initials="H." surname="Stenn">
       <organization>Network Time Foundation</organization>
@@ -173,8 +178,7 @@
         points regarding NTP extension fields and their usage with legacy
         Message Authentication Codes (MACs).</t>
 
-      <t>With the adoption of this update, the authors recommend rescinding
-        <xref target="RFC7822">RFC 7822</xref>.</t>
+      <t>This proposal obsoletes <xref target="RFC7822">RFC 7822</xref>.</t>
     </abstract>
   </front>
 
@@ -233,9 +237,8 @@
         not require a MAC, allows EFs to be on 4-octet boundaries of any
         acceptable length, and provides methods to disambiguate packet
         parsing in the unexpected case where an implementation would choose
-        to send a packet that could be ambiguously parsed.  With the
-        adoption of this proposal the authors recommend
-        rescinding <xref target="RFC7822">RFC 7822</xref>.</t>
+        to send a packet that could be ambiguously parsed.  This proposal
+        obsoletes <xref target="RFC7822">RFC 7822</xref>.</t>
 
       <t>This document better specifies and clarifies extension fields as
         well as the requirements and parsing of a legacy MAC, with changes
