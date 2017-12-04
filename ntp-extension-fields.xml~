@@ -68,6 +68,8 @@
         <postal>
           <street>6 Hamda St.</street>
 
+          <!-- Reorder these if your country does things differently -->
+
           <city>Yokneam, 20692</city>
 
           <region/>
@@ -89,6 +91,8 @@
       <address>
         <postal>
           <street>P.O. Box 918</street>
+
+          <!-- Reorder these if your country does things differently -->
 
           <city>Talent, OR</city>
 
