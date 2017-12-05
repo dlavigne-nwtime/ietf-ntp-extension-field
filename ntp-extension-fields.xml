@@ -40,7 +40,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-stenn-ntp-extension-fields-03"
+<rfc category="std" docName="draft-stenn-ntp-extension-fields-04"
      ipr="trust200902" obsoletes="7822">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -256,7 +256,7 @@
       </section>
 
       <section title="Terms and Abbreviations">
-	<t>EF - Extension Fields</t>
+	<t>EF - Extension Field</t>
         <t>MAC - Message Authentication Code</t>
         <t>NTPv4 - Network Time Protocol, Version
           4 <xref target="RFC5905">RFC 5905</xref></t>
@@ -268,7 +268,7 @@
         in <xref target="RFC5906">RFC 5906</xref> and puts it in to RFC
         5905, as follows:</t>
 
-      <section title="4. Autokey Cryptography">
+      <section title="RFC5906 Section 4. - Autokey Cryptography">
         <t>This section describes some of the cryptography aspects of
           Autokey.  The third paragraph describes the use of 128- and
           160-bit message digests.  The enumeration of 128- and 160-bit
@@ -281,7 +281,7 @@
           extension field.</t>
       </section>
 
-      <section title="10. Autokey Protocol Messages">
+      <section title="RFC5906 Section 10. - Autokey Protocol Messages">
         <t>This section describes the extension field format, including
           initial flag bits, a Code field, and 8-bit Field Type, and the
           16-bit Length.  This proposal expands and clarifies this
@@ -292,12 +292,12 @@
           is no longer true.</t>
       </section>
 
-      <section title="11.5. Error Recovery">
+      <section title="RFC5906 Section 11.5. - Error Recovery">
         <t>This section describes the crypto-NAK, which should be described
           in RFC 5905.</t>
       </section>
 
-      <section title="13. IANA Consideration">
+      <section title="RFC5906 Section 13. - IANA Consideration">
         <t>This section lists the Autokey-related Extension Field Types,
           including Flag Bits, Codes, and Field Types, which should be
           described in RFC 5905, or perhaps in some other document.</t>
@@ -308,7 +308,7 @@
       <t>This document updates Section 7.5 of <xref target="RFC5905">RFC
           5905</xref> as follows:</t>
 
-      <section title="OLD: 7.5 NTP Extension Field Format">
+      <section title="OLD: RFC5905 7.5 - NTP Extension Field Format">
         <t>In NTPv4, one or more extension fields can be inserted after the
           header and before the MAC, which is always present when an
           extension field is present.  Other than defining the field format,
@@ -341,7 +341,7 @@
         Padding field.</t>
       </section>
 
-      <section title="NEW: 7.5 NTP Extension Field Format">
+      <section title="NEW: RFC5905 Section 7.5 - NTP Extension Field Format">
         <t>In NTPv4, one or more extension fields can be inserted after the
           header and before the possibly optional legacy MAC.  A MAC SHOULD
           be present when an extension field is present.  A MAC is always
@@ -444,7 +444,7 @@
         32-bit (4 octet) boundary.</t>
       </section>
 
-      <section title="NEW: 7.5.1 Extension Fields and MACs">
+      <section title="NEW: RFC5905 Section 7.5.1 - Extension Fields and MACs">
         <t>With the inclusion of additional Extension Fields, there is now a
           potential that a poorly-designed implementation would produce an
           ambiguous parsing in the presence of a legacy MAC.  If an
@@ -706,14 +706,14 @@ if (leg_mac < 0) {
         </section>
       </section>
 
-      <section title="OLD: 9.2. Peer Process Operations">
+      <section title="OLD: RFC5905 Section 9.2. - Peer Process Operations">
         <t>...</t>
         <t>FXMIT. ... This message includes the normal NTP header data shown
           in Figure 8, but with a MAC consisting of four octets of
           zeros. ...</t>
       </section>
 
-      <section title="NEW: 9.2. Peer Process Operations">
+      <section title="NEW: RFC5905 Section 9.2. - Peer Process Operations">
         <t>...</t>
         <t>FXMIT. ... This message includes the normal NTP header data shown
           in Figure 8, but with a MAC consisting of four octets of zeros.
@@ -722,12 +722,10 @@ if (leg_mac < 0) {
       </section>
     </section>
 
-<!--
     <section anchor="Acknowledgements" title="Acknowledgements">
-      <t>The author wishes to acknowledge the contributions of Joey
-      Saccadonuts.</t>
+      <t>The author wishes to acknowledge the contributions of Sam
+      Weiler.</t>
     </section>
--->
 
     <!-- Possibly a 'Contributors' section ... -->
 
