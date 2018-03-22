@@ -187,7 +187,7 @@
 
       <t>With the knowledge and experience we have gained over time, it has
 	become clear that simplifications, clarifications, and improvements
-	can be made to the NTP specification around EFs and MACs.>/t>
+	can be made to the NTP specification around EFs and MACs.</t>
   
       <t>This proposal adjusts the requirements around EFs and MACs, allows
         EFs to be on 4-octet boundaries of any acceptable length, and
