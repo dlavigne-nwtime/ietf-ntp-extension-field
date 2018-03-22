@@ -40,7 +40,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-stenn-ntp-extension-fields-05"
+<rfc category="std" docName="draft-stenn-ntp-extension-fields-06"
      ipr="trust200902" obsoletes="7822">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -160,7 +160,7 @@
 
   <middle>
     <section title="Introduction">
-      <t>The NTP header format consists of a set of fixed fields that may be
+      <t>An NTP packet consists of a set of fixed fields that may be
         followed by optional fields.  Two types of optional fields are
         defined: extension fields (EFs) as defined in Section 7.5
         of <xref target="RFC5905">RFC 5905</xref>, and legacy Message
@@ -176,8 +176,8 @@
         Autokey would likely never read that document.  The result of this
         would be interoperability problems, at least.  To address this
         problem, this proposal also includes copying and clarifying some of
-        the content of RFC 5906 and putting it into RFC 5905.  Because
-        there is a reasonable chance RFC 5906 will be deprecated, this
+        the content of RFC 5906 and putting it into RFC 5905.  Because there
+        is a reasonable expectation that RFC 5906 will be deprecated, this
         document does not propose changes or updates to RFC 5906.</t>
 
       <t>NTP extension fields are defined in <xref target="RFC5905">RFC
@@ -185,44 +185,15 @@
         future extensions and features without modifying the NTP header
         format (Section 16 of <xref target="RFC5905">RFC 5905</xref>).</t>
 
-      <t>Section 7.5 of <xref target="RFC5905">RFC 5905</xref> has always
-        clearly stated that "one or more extension fields can be inserted
-        after the header and before the MAC, which is always present when an
-        extension field is present."  However, the experimental Checksum
-        Complement <xref target="RFC7821">RFC 7821</xref> cannot be used if
-        the NTP packet contains a MAC.  Furthermore, while it is clear that
-        the type of assurance and protection offered by a MAC or some other
-        signature SHOULD be used, there can be benefit to relaxing the
-        current 'MUST' requirement.</t>
-
-      <t>To allow for this, changes to the NTPv4 specification must be
-        made.</t>
-
-      <t><xref target="RFC7822">RFC 7822</xref> was an attempt to change the
-        rules around MACs, but in doing so, it completely removed the
-        long-standing rule that the presence of an extension field required
-        MAC protection, created additional requirements on new EFs that are
-        not shown to be needed (see Section 7.5.1.1 of RFC 7822), added an
-        express ordinary limit to the length of a MAC, and required that
-        certain position-dependent EFs be at least 28 octets long.  Limiting
-        the length of a MAC prohibits the use of longer MACs, should that
-        ever be needed.  RFC 7822 makes several other new requirements but
-        does not offer any advice or direction on how to meet those
-        requirements.  Requiring the last EF to be at least 28 octets long
-        is needlessly wasteful, especially if the LAST-EF proposal is
-        accepted and used.</t>
-
-      <t>The rules in RFC 7822 for the length requirement on EFs and any
-        legacy MAC are intricate and complex.</t>
-
-      <t>[There are other problems with Sections 7.5.1.1 thru 7.5.1.4, but
-	we won't describe those here unless there is clear need for it.]</t>
+      <t>With the knowledge and experience we have gained over time, it has
+	become clear that simplifications, clarifications, and improvements
+	can be made to the NTP specification around EFs and MACs.>/t>
   
       <t>This proposal adjusts the requirements around EFs and MACs, allows
         EFs to be on 4-octet boundaries of any acceptable length, and
         provides methods to disambiguate packet parsing in the unexpected
         and unlikely case where an implementation would choose to send a
-        packet that could be ambiguously parsed.</t>
+        packet that could be ambiguously parsed by the receiver.</t>
 
       <t>This proposal deprecates <xref target="RFC7822">RFC 7822</xref>.</t>
 
@@ -424,14 +395,16 @@
         length of the entire extension field in octets, including any
         Padding.</t>
 
-      <t>While the minimum field length containing required fields is four
-        words (16 octets), the maximum field length MUST NOT be longer than
-        65532 octets due to the maximum size of the data represented by the
-        Length field, and SHOULD be small enough that the size of the NTP
-        packet received by the client does not exceed the smallest MTU
-        between the sender and the recipient.  The bottom two bits of the
-        Field Length SHOULD be zero and the EF data SHOULD be aligned to a
-        32-bit (4 octet) boundary.</t>
+      <t>While the minimum field length of an EF that contains no value
+        fields is one word (four octets), and the minimum field length of an
+        EF that contains required fields is two words (8 octets), the
+        maximum field length MUST NOT be longer than 65532 octets due to the
+        maximum size of the data represented by the Length field, and SHOULD
+        be small enough that the size of the NTP packet received by the
+        client does not exceed the smallest MTU between the sender and the
+        recipient.  The bottom two bits of the Field Length SHOULD be zero
+        and the EF data SHOULD be aligned to a 32-bit (4 octet)
+        boundary.</t>
       </section>
 
       <section title="NEW: RFC5905 Section 7.5.1 - Extension Fields and MACs">
@@ -440,8 +413,7 @@
           ambiguous parsing in the presence of a legacy MAC.  If an
           implementation offers even a modicum of care, there will be no
           ambiguity when parsing an NTP packet that contains a legacy MAC
-          from an existing implementation.
-        </t>
+          from an existing implementation.</t>
 
         <t>The first protection from this ambiguity comes from the fact that
           current conforming implementations only support the Autokey EF,
@@ -747,49 +719,35 @@ if (leg_mac < 0) {
  
       <t><figure title="Current Extension Fields">
           <artwork name="Current Extension Fields"><![CDATA[
- 0           1
- 0123 4567 89012345   What:
-+---------+--------+
-|RE   Code|  Type  |
-+---------+--------+
-|00     0 |     0  |  crypto-NAK (with Field Length of 0)
-|         |     0  |  RESERVED: Permanently Unassigned
-+---------+--------+
-|         |     1  |  RESERVED: Unassigned
-+---------+--------+
-|00     0 |     2  |  Autokey: No-Operation Request
-|10     0 |     2  |  Autokey: No-Operation Response
-+---------+--------+
-|00     1 |     2  |  Autokey: Association Message Request
-|10     1 |     2  |  Autokey: Association Message Response
-+---------+--------+
-|00     2 |     2  |  Autokey: Certificate Message Request
-|10     2 |     2  |  Autokey: Certificate Message Response
-+---------+--------+
-|00     3 |     2  |  Autokey: Cookie Message Request
-|10     3 |     2  |  Autokey: Cookie Message Response
-+---------+--------+
-|00     4 |     2  |  Autokey: Autokey Message Request
-|10     4 |     2  |  Autokey: Autokey Message Response
-+---------+--------+
-|00     5 |     2  |  Autokey: Leapseconds Value Message Request
-|10     5 |     2  |  Autokey: Leapseconds Value Message Response
-+---------+--------+
-|00     6 |     2  |  Autokey: Sign Message Request
-|10     6 |     2  |  Autokey: Sign Message Response
-+---------+--------+
-|00     7 |     2  |  Autokey: IFF Identity Message Request
-|10     7 |     2  |  Autokey: IFF Identity Message Response
-+--------+--------+
-|00     8 |     2  |  Autokey: GQ Identity Message Request
-|10     8 |     2  |  Autokey: GQ Identity Message Response
-+---------+--------+
-|00     9 |     2  |  Autokey: MV Identity Message Request
-|10     9 |     2  |  Autokey: MV Identity Message Response
-+---------+--------+
-|       0 |     5  |  Checksum Complement
-|00100000 |     5  |  Checksum Complement
-+----+----+--------+
++------------+---------------------------------------------+
+| Field Type |  Meaning                                    |
++------------+---------------------------------------------+
+|   0x0000   | crypto-NAK (with Field Length of 0)         |
+|   0x0000   | RESERVED: Permanently Unassigned            |
+|   0x0001   | RESERVED: Unassigned                        |
+|   0x0002   | Autokey: No-Operation Request               |
+|   0x8002   | Autokey: No-Operation Response              |
+|   0x0102   | Autokey: Association Message Request        |
+|   0x8102   | Autokey: Association Message Response       |
+|   0x0202   | Autokey: Certificate Message Request        |
+|   0x8202   | Autokey: Certificate Message Response       |
+|   0x0302   | Autokey: Cookie Message Request             |
+|   0x8302   | Autokey: Cookie Message Response            |
+|   0x0402   | Autokey: Autokey Message Request            |
+|   0x8402   | Autokey: Autokey Message Response           |
+|   0x0502   | Autokey: Leapseconds Value Message Request  |
+|   0x8502   | Autokey: Leapseconds Value Message Response |
+|   0x0602   | Autokey: Sign Message Request               |
+|   0x8602   | Autokey: Sign Message Response              |
+|   0x0702   | Autokey: IFF Identity Message Request       |
+|   0x8702   | Autokey: IFF Identity Message Response      |
+|   0x0802   | Autokey: GQ Identity Message Request        |
+|   0x8802   | Autokey: GQ Identity Message Response       |
+|   0x0902   | Autokey: MV Identity Message Request        |
+|   0x8902   | Autokey: MV Identity Message Response       |
+|   0x0005   | Checksum Complement                         |
+|   0x1005   | Checksum Complement                         |
++------------+---------------------------------------------+
 ]]></artwork>
         </figure></t>
     </section>
@@ -856,6 +814,7 @@ if (leg_mac < 0) {
 v02 2016-10-29  HMS: Updates
 v03 2018-08-21  HMS: Updates
     2018-11-29  HMS: Err32whatever to RFC7822.  Expand on various reasonings.
+v06 2018-03-21  HMS: Updates
       -->
   </back>
 </rfc>
