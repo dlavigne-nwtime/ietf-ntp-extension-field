@@ -153,7 +153,7 @@
         updates <xref target="RFC5905">RFC 5905</xref> by clarifying some
         points regarding NTP extension fields and their usage with legacy
         Message Authentication Codes (MACs), and removes wasteful
-        requirements added by <xref target="RFC7822">RCF 7822</ref>.</t>
+        requirements added by <xref target="RFC7822">RCF 7822</xref>.</t>
 
       <t>This proposal deprecates <xref target="RFC7822">RFC 7822</xref>.</t>
     </abstract>
