@@ -40,7 +40,7 @@
 <?rfc subcompact="no" ?>
 <!-- keep one blank line between list items -->
 <!-- end of list of popular I-D processing instructions -->
-<rfc category="std" docName="draft-stenn-ntp-extension-fields-06"
+<rfc category="std" docName="draft-stenn-ntp-extension-fields-07"
      ipr="trust200902" obsoletes="7822">
   <!-- category values: std, bcp, info, exp, and historic
      ipr values: full3667, noModification3667, noDerivatives3667
@@ -149,10 +149,11 @@
         in <xref target="RFC5905">RFC 5905</xref>
         and <xref target="RFC5906">RFC 5906</xref>, resides after the end of
         the NTP header and supplies optional capabilities or information
-        that is not conveyed in the standard NTP header.  This document
+        that cannot be conveyed in the basic NTP packet.  This document
         updates <xref target="RFC5905">RFC 5905</xref> by clarifying some
         points regarding NTP extension fields and their usage with legacy
-        Message Authentication Codes (MACs).</t>
+        Message Authentication Codes (MACs), and removes wasteful
+        requirements added by <xref target="RFC7822">RCF 7822</ref>.</t>
 
       <t>This proposal deprecates <xref target="RFC7822">RFC 7822</xref>.</t>
     </abstract>
@@ -175,13 +176,13 @@
         Informational an implementor that was not planning to provide
         Autokey would likely never read that document.  The result of this
         would be interoperability problems, at least.  To address this
-        problem, this proposal also includes copying and clarifying some of
-        the content of RFC 5906 and putting it into RFC 5905.  Because there
-        is a reasonable expectation that RFC 5906 will be deprecated, this
+        problem this proposal also copies and clarifies some of the content
+        of RFC 5906, putting it into RFC 5905.  Because there is a
+        reasonable expectation that RFC 5906 will be deprecated, this
         document does not propose changes or updates to RFC 5906.</t>
 
       <t>NTP extension fields are defined in <xref target="RFC5905">RFC
-          5905</xref> as a generic mechanism that allows the addition of
+        5905</xref> as a generic mechanism that allows the addition of
         future extensions and features without modifying the NTP header
         format (Section 16 of <xref target="RFC5905">RFC 5905</xref>).</t>
 
@@ -189,13 +190,16 @@
 	become clear that simplifications, clarifications, and improvements
 	can be made to the NTP specification around EFs and MACs.</t>
   
-      <t>This proposal adjusts the requirements around EFs and MACs, allows
-        EFs to be on 4-octet boundaries of any acceptable length, and
-        provides methods to disambiguate packet parsing in the unexpected
-        and unlikely case where an implementation would choose to send a
-        packet that could be ambiguously parsed by the receiver.</t>
+      <t>This proposal adjusts and clarifies the requirements around EFs and
+        MACs, allows EFs to be on 4-octet boundaries of any acceptable
+        length, and provides methods to disambiguate packet parsing in the
+        unexpected and unlikely case where an implementation would choose to
+        send a packet that could be ambiguously parsed by the receiver.</t>
 
       <t>This proposal deprecates <xref target="RFC7822">RFC 7822</xref>.</t>
+
+      <t>Implementations are still free to send EFs that are padded to
+	longer lengths that otherwise follow the requirements below.</t>
 
       <t>This document better specifies and clarifies extension fields as
         well as the requirements and parsing of a legacy MAC, with changes
@@ -235,11 +239,13 @@
           160-bit message digests.  The enumeration of 128- and 160-bit
           message digests is not meant to be limiting - other message digest
           lengths MAY be implemented.  This paragraph also describes some of
-          the recommended semantic ranges of the key ID.  This information
+          the expected semantic ranges of the key ID.  This information
           belongs in RFC 5905.  The key ID value is particularly significant
-          because it provide additional disambiguation protection when
-          deciding if the next data portion is either a legacy MAC or an
-          extension field.</t>
+          because it provides additional detection and disambiguation
+          protection when deciding if the next data portion is either a
+          legacy MAC or an extension field.  [This is additional evidence
+          that although RFC 5906 is Informational, parts of its content are
+          REQUIRED for proper behavior of RFC 5905.]</t>
       </section>
 
       <section title="RFC5906 Section 10. - Autokey Protocol Messages">
@@ -255,13 +261,19 @@
 
       <section title="RFC5906 Section 11.5. - Error Recovery">
         <t>This section describes the crypto-NAK, which should be described
-          in RFC 5905.</t>
+          in RFC 5905.  A crypto-NAK is used by RFC 5905 as well.  [This is
+          additional evidence that even though RFC 5906 was Informational,
+          some of its content is REQUIRED for proper behavior for RFC
+          5095.]</t>
       </section>
 
       <section title="RFC5906 Section 13. - IANA Consideration">
         <t>This section lists the Autokey-related Extension Field Types,
           including Flag Bits, Codes, and Field Types, which should be
-          described in RFC 5905, or perhaps in some other document.</t>
+          described in RFC 5905, or perhaps in some other document.  [This
+          is additional evidence that even though RFC 5906 is
+          Informational, some of its content is REQUIRED for proper
+          behavior for RFC 5905.]</t>
       </section>
     </section>
       
@@ -269,7 +281,7 @@
       <t>This document updates Section 7.5 of <xref target="RFC5905">RFC
           5905</xref> as follows:</t>
 
-      <section title="OLD: RFC5905 7.5 - NTP Extension Field Format">
+      <section title="OLD: 'RFC5905 7.5 - NTP Extension Field Format'">
         <t>In NTPv4, one or more extension fields can be inserted after the
           header and before the MAC, which is always present when an
           extension field is present.  Other than defining the field format,
@@ -302,7 +314,7 @@
         Padding field.</t>
       </section>
 
-      <section title="NEW: RFC5905 Section 7.5 - NTP Extension Field Format">
+      <section title="NEW: 'RFC5905 Section 7.5 - NTP Extension Field Format'">
         <t>In NTPv4, one or more extension fields can be inserted after the
           header and before the possibly optional legacy MAC.  A MAC SHOULD
           be present when an extension field is present.  A MAC is always
@@ -326,24 +338,31 @@
 |                       Padding (as needed)                     | 
 +---------------------------------------------------------------+]]></artwork>
         </figure></t>
-      <t>All extension fields are zero-padded to a word (four octet)
-        boundary.  The Field Type is specific to the defined function and
-        detailed information about the Field Type is not elaborated here.
-        The minimum size of an Extension Field is a 32-bit word (4 octets),
-        and while the maximum extension field size MUST be 65532 octets or
-        less, an NTP packet SHOULD NOT exceed the network MTU.</t>
 
-      <t>The Length field is a 16-bit unsigned integer that indicates the
+      <t>The four octets that comprise the Field Type and Field Length are
+	called the Extension Field Header.  Octets beyond the Extension
+	Field Header are called the Extension Field Body, or the Extension
+	Field Payload.  The EF Body (EF Payload) MAY be null in some
+	cases.</t>
+
+      <t>All extension fields are zero-padded to a word (four octet)
+        boundary.  The Field Type is specific to the defined functionality
+        and detailed information about the Field Type is not elaborated
+        here.  The minimum size of an Extension Field is a 32-bit word (4
+        octets), and while the maximum extension field size MUST be 65532
+        octets or less, an NTP packet SHOULD NOT exceed the network MTU.</t>
+
+      <t>The Field Length is a 16-bit unsigned integer that indicates the
         length of the entire extension field in octets, including any
         Padding octets.  The bottom two bits of the Field Length SHOULD be
         zero, and the size of the extension field SHOULD end on a 32-bit (4
         octet) boundary.  [RFC5905 Section 7.5 says "All extension fields
         are zero-padded to a word (four octets) boundary." but does not use
-        'MUST' language.  Is it overkill to reiterate this requirement
-        here?  Should we use SHOULD or MUST regarding the bottom two bits
-        or the boundary of the EF?  It is possible, down the road, that we
-        might find some use for those bottom 2 bits, even if we require a
-        32-bit boundary on the last octet of an EF.]</t>
+        'MUST' language.  Is it overkill to reiterate this requirement here?
+        Should we use SHOULD or MUST regarding the bottom two bits or the
+        boundary of the EF?  It is possible, down the road, that we might
+        find some use for those bottom 2 bits, even if we require a 32-bit
+        boundary on the last octet of an EF.]</t>
 
       <t>The Field Type contains the following sub-elements:</t>
       <t><figure title="Field Type Format">
@@ -370,10 +389,9 @@
 	point in the future.]</t>
 
       <t>[The EF Code subtype is currently used
-        by <xref target="RFC5906">RFC 5906, Autokey</xref>.  The EF Code
-        subtype is used by the proposed Extended Information EF proposal,
-        and is expected to be used by the NTS Extension Field, at
-        least.]</t>
+        by <xref target="RFC5906">RFC 5906, Autokey</xref>, by the proposed
+        Extended Information EF proposal, and is expected to be used by the
+        NTS Extension Field, at least.]</t>
 
       <t>The Autokey EF currently uses the most Code values - 10 of them,
 	which equates to the least-significant 4 bits of the high-order
@@ -382,314 +400,124 @@
 	additional bits were proposed.  Make no assumptions about the unused
 	bits in this octet.</t>
 
-      <t>The Field Type, Value, and Padding fields are specific to the
-        defined function and are not elaborated here; appropriate Field Type
-        flags, the EF Code, and EF Type values are defined in an IANA
-        registry, and the Length, Value, and Padding values are defined by
-        the document referred to by the registry.  If a host receives an
-        extension field with an unknown Field Type, the host SHOULD ignore
-        the extension field and MAY drop the packet altogether, depending on
-        local policy.</t>
+      <t>The EF Header and Body fields (the Flags, Code, Type, and Length,
+        and any Value or Padding) are specific to the defined functionality
+        and are not elaborated here; appropriate Field Type Flags, the EF
+        Code, and EF Type values are defined in an IANA registry, and the
+        Length, Value, and Padding values are defined by the document
+        referred to by the registry.  If a host receives an extension field
+        with an unknown Field Type, the host SHOULD ignore the extension
+        field and MAY drop the packet altogether, depending on local
+        policy.</t>
 
       <t>The Length field is a 16-bit unsigned integer that indicates the
         length of the entire extension field in octets, including any
         Padding.</t>
 
-      <t>While the minimum field length of an EF that contains no value
-        fields is one word (four octets), and the minimum field length of an
-        EF that contains required fields is two words (8 octets), the
-        maximum field length MUST NOT be longer than 65532 octets due to the
-        maximum size of the data represented by the Length field, and SHOULD
-        be small enough that the size of the NTP packet received by the
-        client does not exceed the smallest MTU between the sender and the
-        recipient.  The bottom two bits of the Field Length SHOULD be zero
-        and the EF data SHOULD be aligned to a 32-bit (4 octet)
-        boundary.</t>
+      <t>While the minimum field length of an EF that contains no value or
+        padding fields is one word (four octets), and the minimum field
+        length of an EF that contains required fields is two words (8
+        octets), the maximum field length MUST NOT be longer than 65532
+        octets due to the maximum size of the data represented by the Length
+        field, and SHOULD be small enough that the size of the NTP packet
+        received by the client does not exceed the smallest MTU between the
+        sender and the recipient.  The bottom two bits of the Field Length
+        SHOULD be zero and the EF data SHOULD be aligned to a 32-bit (4
+        octet) boundary.</t>
       </section>
 
-      <section title="NEW: RFC5905 Section 7.5.1 - Extension Fields and MACs">
+      <section title="NEW: 'RFC5905 Section 7.5.1 - Extension Fields and MACs'">
         <t>With the inclusion of additional Extension Fields, there is now a
           potential that a poorly-designed implementation would produce an
-          ambiguous parsing in the presence of a legacy MAC.  If an
-          implementation offers even a modicum of care, there will be no
-          ambiguity when parsing an NTP packet that contains a legacy MAC
-          from an existing implementation.</t>
+          ambiguous parsing in the presence of a legacy MAC.  What follows
+          are two possibly independent ways to prevent this situation from
+          ever happening.</t>
 
-        <t>The first protection from this ambiguity comes from the fact that
-          current conforming implementations only support the Autokey EF,
-          which uses EF Type 2 and a legacy MAC.  While the Experimental UDP
-          Checksum Complement specified by <xref target="RFC7821">RFC
-          7821</xref> uses EF Type 5, it specifically prohibits the use of a
-          MAC, and the 0x2000 bit in its assigned EF specification of 0x2005
-          originally signified that a MAC is optional when this EF is seen.
-          While the 0x2000 bit is no longer proposed as a means to flag that
-          the MAC is optional, any usage of this EF with a Code field of
-          either 0x2005 or 0x0005 can be trivially recognized as an
-          Experimental UDP Checksum Complement EF, which does not, indeed,
-          MUST NOT be followed by a MAC.</t>
+	<t>Note well that to-date, there are only two defined Extension
+	  Field Types: Autokey, defined by <xref target="RFC5906">RFC
+	  5906</xref>, and the Experimental UDP Checksum Complement in the
+	  Network Time Protocol, defined by
+	  <xref target="RFC7821">RFC 7821</xref>.</t>
 
-        <t>[As a side note, the requirement in <xref target="RFC7821">RFC
-            7821</xref> that the UDP Checksum Complement EF must have a 28
-            octet length is demonstrably not needed if this proposal is
-            accepted.  It only needs 8 octets: 4 octets of EF header, 2
-            octets of must-be-zero padding, and 2 octets of Checksum
-            Complement.]</t>
+	<t>In spite of its known serious problems, Autokey is still in use
+	  by some and is a legacy case that is easily supported.  Old
+	  systems will still work.  An old system will still be able to open
+	  a properly-configured Autokey association to a new system, a new
+	  system will still be able to open a properly-configured Autokey
+	  association with an old system, and two new systems will be able
+	  to open a properly-configured Autokey association.</t>
 
-        <t>If an implementation uses the LAST-EF extension field, the
-          presence of this field means "I am the last EF in this NTP Packet.
-          Any subsequent packet data MUST be a legacy MAC."  In this case,
-          there is no parsing ambiguity.</t>
+	<t>The UDP Checksum Complement extension field forbids the use of a
+	  legacy MAC, so any packet that uses it CANNOT be using a legacy
+	  MAC.  [We could list the detailed and specific reasons why traffic
+	  using this EF is immune to EF/legacy MAC problems, but I fear that
+	  would just be confusing to most people.]</t>
 
-        <t>If a system sends its MAC as a MAC-EF and does not send a legacy
-          MAC, there is no parsing ambiguity.</t>
+	<t>The first and best way to prevent ambiguous parsing is to use the
+	  I-DO extension field.</t>
 
-        <t>The only time there is a potential for a parsing ambiguity is
-          when a legacy MAC is provided and neither of the previous two
-          cases are present.  Even in this case, there is minimal risk.</t>
+	<t>By definition any NTP client or server that handles any other
+	  Extension Fields is "new code" and can completely prevent
+	  ambiguity by the initiating side sending a packet containing an
+	  I-DO extension field followed by an optional MAC-EF followed by an
+	  optional legacy MAC.  The inclusion of any MAC would be dictated
+	  by the authentication requirements of the association.</t>
 
-	<t>An implementation MAY choose to add padding to any EF, or at
-	  least any EF that comes before a legacy MAC, to avoid an EF that
-	  is 16, 20, or 24 octets in length.  Doing this would generally
-	  avoid any risk of mis-parsing.  But this should not be needed for
-	  the following reasons.</t>
+	<t>Note that NTP traffic works perfectly well without using any
+	  other extension fields.  Newer extension fields offer additional
+	  capabilities, but these capabilities are not required for
+	  operation.  [Even in the case of NTS or SNT, we're talking about
+	  "new code" that can be expected to be aware of issues with new
+	  extension fields an legacy MACs.]</t>
 
-        <t>An Extension Field contains a 2-octet Field Type, a 2-octet Field
-          Length, and any payload (data and/or padding).  If the NTP Packet
-          parsing is at a point where it is evaluating data after the base
-          packet, one of the following situations exists:
-          <list>
-            <t>If the Field Length is not an even multiple of 4, we are not
-              looking at an extension field.  In this case, the only
-              possibility of having a valid packet is if the data is part of
-              a legacy MAC.</t>
-            <t>If the Field Length is valid, i.e., an even multiple of 4
-              octets, one of the following three cases must be present:
-              <list>
-                <t>First, the Field Length will be less than the remaining
-                  data.  This means subsequent data must parse as some
-                  number of Extension Fields, optionally followed by a legacy
-                  MAC.</t>
-                <t>Second, the Field Length will exactly match the
-                  remaining data.</t>
-                <t>The third case is where the Field Length is longer than
-                  the remaining packet data.  In this case, the current
-                  parse cannot be a valid extension field, and if the packet
-                  is valid, the data must be a legacy MAC.</t>
-                </list></t>
-            </list></t>
+	<t>If the initiating side sends an I-DO packet and gets no response,
+	  it operates as if the other side cannot handle new extension
+	  fields and simply continues the association without sending any
+	  new extension fields.  At any point in the future a packet can be
+	  sent with an I-DO extension field to see if the other side will
+	  respond.</t>
 
-        <t>Semantic checking may also be done to validate a potential legacy
-          MAC.  A legacy MAC is a four-octet Key Identifier followed by a
-          message digest.  The usual message digest is 16 octets long but
-          may be another size, depending on the digest algorithm.  In the
-          Reference Implementation and in implementations that follow the
-          guidelines for the values of the Key Identifier, a Key Identifier
-          between 1 and 65535, inclusive, is a symmetric key, while a Key
-          Identifier that is > 65535 is an
-          Autokey <xref target="RFC5906">RFC 5906</xref>, or similar.  If
-          the receiving system does not recognize the Key Identifier, the
-          data CANNOT be a valid legacy MAC.  If the receiving system
-          recognizes the Key Identifier, then it also has knowledge of the
-          digest algorithm and can make sure the digest payload is the
-          proper length.  If this is not the case, then the data CANNOT be a
-          valid legacy MAC.  In this case, it MIGHT be a valid extension
-          field.</t>
+	<t>An NTP implementation that receives a packet with an I-DO
+	  extension field may respond with a packet that may or may not
+	  contain an I-DO Response.  If it does not respond, the other side
+	  SHOULD assume that the receiver does not understand new EFs.  If
+	  it responds without sending an I-DO Response extension field, the
+	  sending side knows it should not send any new extension fields to
+	  this server.  If the system that receives an I-DO extension field
+	  responds with an I-DO Response, it's telling the sender exactly
+	  what capabilities it is currently willing to exchange.</t>
 
-        <t>It is trivial to parse the data after the base NTP packet and
-          come up with a list of potential parsings.  A local policy choice
-          can specify the precedence of the parsing options in this
-          case.</t>
+	<t>The second way to prevent ambiguous parsing is to use the LAST-EF
+	extension field.</t>
 
-        <t>If none of the parsings validate, the packet fails
-          authentication.  An implementation has three local policy choices
-          available if LAST-EF is not used and a legacy MAC may be provided.
-          First, the implementation may specify EF-precedence.  Second, the
-          implementation may specify legacy-MAC-precedence.  Finally, the
-          implementation may specify "best fit" precedence.  In this last
-          case, the packet will meet one of the three following criteria:
-          First, none of the parsings will match.  Again, this is a case of
-          failed authentication.  Second, exactly one parsing will match and
-          that parsing will be accepted.  Third, multiple parsings will
-          match, in which case the implementation may choose its
-          behavior.</t>
+	<t>By definition, if I-DO is used and each side agrees to support
+	  LAST-EF then LAST-EF will prevent any ambiguity.</t>
 
-        <t>Additionally, most EFs will require a MAC.  If there is a
-          syntactically-valid parsing that does not include a MAC but
-          previously scanned EFs require a MAC, then in a multiple-choice
-          parsing scenario where one of the choices does not include a MAC
-          the "no MAC provided" choice SHOULD be eliminated.</t>
+	<t>If, however, I-DO is not used then one side can simply send a
+	  packet with a LAST-EF.  The LAST-EF extension field could be
+	  four-octet extension field, it could be a 28 octet extension
+	  field, or some other length that ends on a 32-bit boundary.  If
+	  the other side responds appropriately then all is well.  If the
+	  other side does not respond appropriately the sender should
+	  proceed without sending any new extension fields.</t>
 
-        <t>Note well that this rare situation can be completely avoided by
-          using LAST-EF, or by indicating that no legacy MAC will be
-          used.</t>
+	<t>Parties interested in additional reasons for and approaches to
+	  understanding why there is no reason to be concerned about
+	  potential ambiguities with new code that would use new extension
+	  fields and legacy MACs can look at the the drafts that preceded
+	  this document.</t>
 
-	<t>Finally, in many cases at least one side will know if a MAC is
-	  required or not.  Client configurations of all types, unicast,
-	  broadcast, multicast, and manycast, that state that a key will be
-	  used to communicate with a server SHOULD reject packets claiming
-	  to be from the server that do not include a MAC.  Symmetric
-	  associations also are configured with similar knowledge and
-	  requirements.</t>
-
-        <section title="Legacy MAC/EF Parsing Pseudocode">
-          <t>Here are two potential pseudocode implementations showing how
-            data after the base NTP packet could be analyzed to identify EFs
-            and a possible legacy MAC.</t>
-
-          <t>Example 1: Generate a list of possible parsings:</t>
-          <t><figure title="Example 1: Generate a list of possible
-          parsings">
-              <artwork name="Generate a list of possible parsings"><![CDATA[
-struct pkt_parse {
- foo * ef_ptr;
- foo * legacy_mac;
- struct pkt_parse * next;
-};
-
-struct pkt_parse pkt_parse_chain = NULL;
-
-EOPacket = address of last data in packet;
-here = address of the EOBasePacket;
-more_efs = 1;
-while (1) {
-    int candidate = 0;
-    int ef_len = 0;
-
-    if (EOPacket > here) {
-        p = emalloc(pkt_parse);                 // *p is zeroed
-        if (this could be a legacy MAC) {       // we know the keyid
-            p->legacy_mac = here;
-            candidate = 1;
-        }
-        if (more_efs && this could be an EF) {  // Length field valid
-            p->ef_ptr = here;
-            ef_len = (the length of the EF);
-            here += ef_len;
-            if (this is a LAST_EF) {
-                more_efs = 0;
-            }
-            candidate = 1;
-        } else {
-            more_efs = 0;
-        }
-    }
-
-    if (candidate) {
-        p->next = pkt_parse_chain;
-        pkt_parse_chain = p;
-    } else {
-        free(p);
-        break;
-    }
-}]]></artwork></figure></t>
-
-          <t>and at this point we can scan thru the items in pkt_parse_chain
-            to do deeper checks, throwing away the parsings that don't make
-            sense.</t>
-
-          <t>This opens up more questions if we get multiple parsings and at
-            least 1 of them is "valid".  It's also perfectly reasonable to
-            decide to produce a single parse based on precedence rules:
-            Prefer legacy MAC, or prefer EF.</t>
-
-          <t>Example 2: Another possible way to handle EF/legacy-MAC
-            parsing:</t>
-
-          <t><figure title="Example 2: Another way to handle
-                            EF/legacy-MAC parsing">
-              <artwork><![CDATA[
-// We're at the end of the base NTP packet.
-// A legacy MAC is allowed:
-// - immediately after the base packet
-// - immediately after one or more Autokey EFs (a non-issue, below)
-// - immediately after a LAST-EF
-
-ef_ok = 1;                              // An EF is allowed here
-legacy_mac_ok = 1;                      // Legacy MAC allowed here
-saw_mac = 0;                            // We haven't seen a MAC yet
-authlen = LEN_PKT_NOMAC;                // Length of a base packet
-leg_mac = rbufp->recv_length - authlen; // # bytes after base
-
-while (leg_mac > 0) {                   // Data after base packet
-        if (leg_mac % 4 != 0 || leg_mac < MIN_MAC_LEN) {
-                return: Bad packet length;
-        }
-
-        // If ef_ok, this could be an EF or legacy MAC
-        skeyid = ntohl(pkt[authlen / 4]);
-        opcode = skeyid >> 16;
-        len = skeyid & 0xffff;
-
-        if (ef_ok && GET_EXT_FIELD_TYPE(opcode) == EF_FT_LAST) {
-                if (leg_mac > MAX_MAC_LEN) {
-                        return: Too much data after LAST_EF;
-                }
-                // Anything here MUST be a legacy MAC
-                ef_ok = 0;
-                legacy_mac_ok = 1;
-        } else {
-                if (4 == leg_mac && 0 == skeyid) {
-                        break;   // Likely crypto-NAK
-                }
-
-                if (legacy_mac_ok && leg_mac <= MAX_MAC_LEN) {
-                        int ksize;
-
-                        // If we find a keyid, we know its alg/length
-                        ksize = auth_findkeysize(skeyid);
-                        if (   ksize != -1
-                            && ksize == leg_mac
-                            && (it validates)) {
-                                saw_mac = 1;
-                                break;
-                        }
-                        // If we got here, it can't be a valid
-                        // legacy MAC.  It's still a potential EF.
-                }
-
-                if (!ef_ok) {
-                        break;
-                }
-
-                // At this point, this SHOULD be an EF
-
-                if (   len % 4 != 0
-                    || len < 4
-                    || len + authlen > rbufp-> recv_length) {
-                        return: Bad length;
-                }
-
-                switch (GET_EXT_FIELD_TYPE(opcode)) {
-                case EF_FT_AK:          // Autokey
-                        // extract calling group name for later
-                        break;
-                case EF_FT_LAST:        // LAST-EF
-                        legacy_mac_ok = 1;
-                        break;
-                default:
-                        legacy_mac_ok = 0;
-                        break;
-                }
-        }
-
-        authlen += len;
-        leg_mac -= len;
-}
-
-if (leg_mac < 0) {
-        return: Malformed packet
-}]]></artwork></figure></t>
         </section>
       </section>
 
-      <section title="OLD: RFC5905 Section 9.2. - Peer Process Operations">
+      <section title="OLD: 'RFC5905 Section 9.2. - Peer Process Operations'">
         <t>...</t>
         <t>FXMIT. ... This message includes the normal NTP header data shown
           in Figure 8, but with a MAC consisting of four octets of
           zeros. ...</t>
       </section>
 
-      <section title="NEW: RFC5905 Section 9.2. - Peer Process Operations">
+      <section title="NEW: 'RFC5905 Section 9.2. - Peer Process Operations'">
         <t>...</t>
         <t>FXMIT. ... This message includes the normal NTP header data shown
           in Figure 8, but with a MAC consisting of four octets of zeros.
@@ -706,16 +534,14 @@ if (leg_mac < 0) {
     <!-- Possibly a 'Contributors' section ... -->
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This memo requests IANA to allocate the following bits in the NTP
-        Extension Field Types table:
+      <t>This memo requests IANA to update the NTP Extension Field Types
+        table in the NTP Parameters document as follows.  The following is
+        expected to be a functional superset of the existing information:
         <list>
           <t>0x8000: R: Response (0: Request, 1: Response)</t>
           <t>0x4000: E: Error (0: OK, 1: Error) - Unused, deprecation expected</t>
         </list>
       </t>
-
-      <t>The following table should be the functionally the same as the
-	existing NTP Extension Field Table.</t>
  
       <t><figure title="Current Extension Fields">
           <artwork name="Current Extension Fields"><![CDATA[
@@ -746,14 +572,14 @@ if (leg_mac < 0) {
 |   0x0902   | Autokey: MV Identity Message Request        |
 |   0x8902   | Autokey: MV Identity Message Response       |
 |   0x0005   | Checksum Complement                         |
-|   0x1005   | Checksum Complement                         |
+|   0x2005   | Checksum Complement                         |
 +------------+---------------------------------------------+
 ]]></artwork>
         </figure></t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
-      <t>Additional information TBD</t>
+      <t>Additional information TBD, as needed.</t>
     </section>
   </middle>
 
