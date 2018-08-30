@@ -558,35 +558,35 @@
       <t>
 	<figure title="Current Extension Fields">
           <artwork name="Current Extension Fields"><![CDATA[
-+------------+---------------------------------------------+
-| Field Type |  Meaning                                    |
-+------------+---------------------------------------------+
-|   0x0000   | crypto-NAK (with Field Length of 0)         |
-|   0x0000   | RESERVED: Permanently Unassigned            |
-|   0x0001   | RESERVED: Unassigned                        |
-|   0x0002   | Autokey: No-Operation Request               |
-|   0x8002   | Autokey: No-Operation Response              |
-|   0x0102   | Autokey: Association Message Request        |
-|   0x8102   | Autokey: Association Message Response       |
-|   0x0202   | Autokey: Certificate Message Request        |
-|   0x8202   | Autokey: Certificate Message Response       |
-|   0x0302   | Autokey: Cookie Message Request             |
-|   0x8302   | Autokey: Cookie Message Response            |
-|   0x0402   | Autokey: Autokey Message Request            |
-|   0x8402   | Autokey: Autokey Message Response           |
-|   0x0502   | Autokey: Leapseconds Value Message Request  |
-|   0x8502   | Autokey: Leapseconds Value Message Response |
-|   0x0602   | Autokey: Sign Message Request               |
-|   0x8602   | Autokey: Sign Message Response              |
-|   0x0702   | Autokey: IFF Identity Message Request       |
-|   0x8702   | Autokey: IFF Identity Message Response      |
-|   0x0802   | Autokey: GQ Identity Message Request        |
-|   0x8802   | Autokey: GQ Identity Message Response       |
-|   0x0902   | Autokey: MV Identity Message Request        |
-|   0x8902   | Autokey: MV Identity Message Response       |
-|   0x0005   | Checksum Complement                         |
-|   0x2005   | Checksum Complement                         |
-+------------+---------------------------------------------+
++------------+----------------------------------------------+
+| Field Type |  Meaning                                     |
++------------+----------------------------------------------+
+|   0x0000   | crypto-NAK (with Field Length of 0)          |
+|   0x0000   | RESERVED: Permanently Unassigned             |
+|   0x0001   | RESERVED: Unassigned                         |
+|   0x0002   | Autokey: No-Operation Request                |
+|   0x8002   | Autokey: No-Operation Response               |
+|   0x0102   | Autokey: Association Message Request         |
+|   0x8102   | Autokey: Association Message Response        |
+|   0x0202   | Autokey: Certificate Message Request         |
+|   0x8202   | Autokey: Certificate Message Response        |
+|   0x0302   | Autokey: Cookie Message Request              |
+|   0x8302   | Autokey: Cookie Message Response             |
+|   0x0402   | Autokey: Autokey Message Request             |
+|   0x8402   | Autokey: Autokey Message Response            |
+|   0x0502   | Autokey: Leapseconds Value Message Request   |
+|   0x8502   | Autokey: Leapseconds Value Message Response  |
+|   0x0602   | Autokey: Sign Message Request                |
+|   0x8602   | Autokey: Sign Message Response               |
+|   0x0702   | Autokey: IFF Identity Message Request        |
+|   0x8702   | Autokey: IFF Identity Message Response       |
+|   0x0802   | Autokey: GQ Identity Message Request         |
+|   0x8802   | Autokey: GQ Identity Message Response        |
+|   0x0902   | Autokey: MV Identity Message Request         |
+|   0x8902   | Autokey: MV Identity Message Response        |
+|   0x0005   | Checksum Complement                          |
+|   0x2005   | Checksum Complement (deprecated flag 0x2000) |
++------------+----------------------------------------------+
 ]]></artwork>
 	</figure>
       </t>
