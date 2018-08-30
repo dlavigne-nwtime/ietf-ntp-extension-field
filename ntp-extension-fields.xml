@@ -538,23 +538,26 @@
       <t>This memo requests IANA to update the NTP Extension Field Types
 	table in the NTP Parameters document as follows.  The following is
 	expected to be a functional superset of the existing information:
-	<t><figure title="NTP Extension Field Type Format">
+	<t>
+	  <figure title="NTP Extension Field Type Format">
             <artwork name="NTP Extension Field Type Format"><![CDATA[
  0                   1           
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
 +---------------+---------------+
 |R|E|      Code |       Type    |
 +-------------------------------++]]></artwork>
-        </figure></t>
+          </figure>
+	</t>
 	<t>Where the following Field Type flags are defined:
 	  <list>
             <t> R: 0 for a "Query", 1 for a "Response"</t>
             <t> E: 0 for "OK", 1 for an "Error".  Unused, and will be deprecated.</t>
-	</list>
-      </t>
+	  </list>
+	</t>
 
-      <t><figure title="Current Extension Fields">
-          <artwork name="Current Extension Fields"><![CDATA[
+	<t>
+	  <figure title="Current Extension Fields">
+            <artwork name="Current Extension Fields"><![CDATA[
 +------------+---------------------------------------------+
 | Field Type |  Meaning                                    |
 +------------+---------------------------------------------+
@@ -585,7 +588,9 @@
 |   0x2005   | Checksum Complement                         |
 +------------+---------------------------------------------+
 ]]></artwork>
-      </figure></t>
+	  </figure>
+	</t>
+      </t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -593,64 +598,64 @@
     </section>
   </middle>
 
-  <!--  *****BACK MATTER ***** -->
+    <!--  *****BACK MATTER ***** -->
 
-  <back>
-    <!-- References split into informative and normative -->
+    <back>
+      <!-- References split into informative and normative -->
 
-    <!-- There are 2 ways to insert reference entries from the citation libraries:
-	 1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
-	 2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
-	 (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+      <!-- There are 2 ways to insert reference entries from the citation libraries:
+	   1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+	   2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+	   (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
 
-	 Both are cited textually in the same manner: by using xref elements.
-	 If you use the PI option, xml2rfc will, by default, try to find included files in the same
-	 directory as the including file. You can also define the XML_LIBRARY environment variable
-	 with a value containing a set of directories to search.  These can be either in the local
-	 filing system or remote ones accessed by http (http://domain/dir/... ).-->
+	   Both are cited textually in the same manner: by using xref elements.
+	   If you use the PI option, xml2rfc will, by default, try to find included files in the same
+	   directory as the including file. You can also define the XML_LIBRARY environment variable
+	   with a value containing a set of directories to search.  These can be either in the local
+	   filing system or remote ones accessed by http (http://domain/dir/... ).-->
 
-    <references title="Normative References">
-      <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+      <references title="Normative References">
+	<!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
 
-      &RFC2119;
+	&RFC2119;
 
-      <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5905.xml"?-->
+	<!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5905.xml"?-->
 
-      &RFC5905;
+	&RFC5905;
 
-      <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5906.xml"?-->
+	<!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5906.xml"?-->
 
-      &RFC5906;
+	&RFC5906;
 
-      &RFC7821;
+	&RFC7821;
 
-      &RFC7822;
-    </references>
+	&RFC7822;
+      </references>
 
-    <!-- Here we use entities that we defined at the beginning. -->
+      <!-- Here we use entities that we defined at the beginning. -->
 
-    <!-- SW: Except that we're not really using these...
+      <!-- SW: Except that we're not really using these...
 
-	 <references title="Informative References">
-	   &RFC3552;
+	   <references title="Informative References">
+	     &RFC3552;
 
-	   &I-D.narten-iana-considerations-rfc2434bis;
+	     &I-D.narten-iana-considerations-rfc2434bis;
 
-	 </references>
-	 -->
+	   </references>
+	   -->
 
-    <!--
-	<section anchor="app-additional" title="Additional Stuff">
-	  <t>This becomes an Appendix.</t>
-	</section>
+      <!--
+	  <section anchor="app-additional" title="Additional Stuff">
+	    <t>This becomes an Appendix.</t>
+	  </section>
+	  -->
+
+      <!-- Change Log
+
+	   v02 2016-10-29  HMS: Updates
+	   v03 2018-08-21  HMS: Updates
+	   2018-11-29  HMS: Err32whatever to RFC7822.  Expand on various reasonings.
+	   v06 2018-03-21  HMS: Updates
 	-->
-
-    <!-- Change Log
-
-	 v02 2016-10-29  HMS: Updates
-	 v03 2018-08-21  HMS: Updates
-	 2018-11-29  HMS: Err32whatever to RFC7822.  Expand on various reasonings.
-	 v06 2018-03-21  HMS: Updates
-      -->
-  </back>
-</rfc>
+    </back>
+  </rfc>
