@@ -510,21 +510,21 @@
 	  this document.</t>
 
       </section>
-    </section>
 
-    <section title="OLD: 'RFC5905 Section 9.2. - Peer Process Operations'">
-      <t>...</t>
-      <t>FXMIT. ... This message includes the normal NTP header data shown
-        in Figure 8, but with a MAC consisting of four octets of
-        zeros. ...</t>
-    </section>
+      <section title="OLD: 'RFC5905 Section 9.2. - Peer Process Operations'">
+	<t>...</t>
+	<t>FXMIT. ... This message includes the normal NTP header data shown
+          in Figure 8, but with a MAC consisting of four octets of
+          zeros. ...</t>
+      </section>
 
-    <section title="NEW: 'RFC5905 Section 9.2. - Peer Process Operations'">
-      <t>...</t>
-      <t>FXMIT. ... This message includes the normal NTP header data shown
-        in Figure 8, but with a MAC consisting of four octets of zeros.
-        This MAC can be a legacy MAC or a MAC-EF.  If it's a MAC-EF, the
-        crypto-NAK MUST be the only MAC in the MAC-EF payload.  ...</t>
+      <section title="NEW: 'RFC5905 Section 9.2. - Peer Process Operations'">
+	<t>...</t>
+	<t>FXMIT. ... This message includes the normal NTP header data shown
+          in Figure 8, but with a MAC consisting of four octets of zeros.
+          This MAC can be a legacy MAC or a MAC-EF.  If it's a MAC-EF, the
+          crypto-NAK MUST be the only MAC in the MAC-EF payload.  ...</t>
+      </section>
     </section>
 
     <section anchor="Acknowledgements" title="Acknowledgements">
