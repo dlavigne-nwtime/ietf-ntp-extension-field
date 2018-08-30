@@ -2,22 +2,22 @@
 <!-- This template is for creating an Internet Draft using xml2rfc,
      which is available here: http://xml.resource.org. -->
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-<!-- One method to get references from the online citation libraries.
-     There has to be one entity for each item to be referenced. 
-     An alternate method (rfc include) is described in the references. -->
-<!ENTITY RFC5905 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5905.xml">
-<!ENTITY RFC5906 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5906.xml">
-<!ENTITY RFC7821 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7821.xml">
-<!ENTITY RFC7822 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7822.xml">
-<!ENTITY RFC2827 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2827.xml">
-<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-<!ENTITY RFC2434 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2434.xml">
-<!ENTITY RFC3552 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3552.xml">
-<!ENTITY I-D.narten-iana-considerations-rfc2434bis SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.narten-iana-considerations-rfc2434bis.xml">
-]>
+	  <!-- One method to get references from the online citation libraries.
+	       There has to be one entity for each item to be referenced.
+	       An alternate method (rfc include) is described in the references. -->
+	  <!ENTITY RFC5905 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5905.xml">
+	  <!ENTITY RFC5906 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5906.xml">
+	  <!ENTITY RFC7821 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7821.xml">
+	  <!ENTITY RFC7822 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7822.xml">
+	  <!ENTITY RFC2827 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2827.xml">
+	  <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+	  <!ENTITY RFC2434 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2434.xml">
+	  <!ENTITY RFC3552 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3552.xml">
+	  <!ENTITY I-D.narten-iana-considerations-rfc2434bis SYSTEM "http://xml.resource.org/public/rfc/bibxml3/reference.I-D.narten-iana-considerations-rfc2434bis.xml">
+	  ]>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
-<!-- For a complete list and description of processing instructions (PIs), 
+<!-- For a complete list and description of processing instructions (PIs),
      please see http://xml.resource.org/authoring/README.html. -->
 <!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
      (Here they are set differently than their defaults in xml2rfc v1.32) -->
@@ -33,7 +33,7 @@
 <!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
 <?rfc sortrefs="yes" ?>
 <!-- sort the reference entries alphabetically -->
-<!-- control vertical white space 
+<!-- control vertical white space
      (using these PIs as follows is recommended by the RFC Editor) -->
 <?rfc compact="yes" ?>
 <!-- do not start each main section on a new page -->
@@ -43,14 +43,14 @@
 <rfc category="std" docName="draft-stenn-ntp-extension-fields-07"
      ipr="trust200902" obsoletes="7822">
   <!-- category values: std, bcp, info, exp, and historic
-     ipr values: full3667, noModification3667, noDerivatives3667
-     you can add the attributes updates="NNNN" and obsoletes="NNNN" 
-     they will automatically be output with "(if approved)" -->
+       ipr values: full3667, noModification3667, noDerivatives3667
+       you can add the attributes updates="NNNN" and obsoletes="NNNN"
+       they will automatically be output with "(if approved)" -->
 
   <!-- ***** FRONT MATTER ***** -->
 
   <front>
-    <!-- The abbreviated title is used in the page header - it is only necessary if the 
+    <!-- The abbreviated title is used in the page header - it is only necessary if the
          full title is longer than 39 characters -->
 
     <title abbrev="NTPv4 Extension Fields">Network Time Protocol Version 4 (NTPv4) Extension Fields
@@ -112,7 +112,7 @@
       </address>
     </author>
 
-<!-- other authors -->
+    <!-- other authors -->
 
     <date year="2018"/>
 
@@ -131,7 +131,7 @@
     <workgroup>Internet Engineering Task Force</workgroup>
 
     <!-- WG name at the upperleft corner of the doc,
-         IETF is fine for individual submissions.  
+         IETF is fine for individual submissions.
          If this element is not present, the default is "Network Working
          Group", which is used by the RFC Editor as a nod to the history of
          the IETF. -->
@@ -182,14 +182,14 @@
         document does not propose changes or updates to RFC 5906.</t>
 
       <t>NTP extension fields are defined in <xref target="RFC5905">RFC
-        5905</xref> as a generic mechanism that allows the addition of
+          5905</xref> as a generic mechanism that allows the addition of
         future extensions and features without modifying the NTP header
         format (Section 16 of <xref target="RFC5905">RFC 5905</xref>).</t>
 
       <t>With the knowledge and experience we have gained over time, it has
 	become clear that simplifications, clarifications, and improvements
 	can be made to the NTP specification around EFs and MACs.</t>
-  
+
       <t>This proposal adjusts and clarifies the requirements around EFs and
         MACs, allows EFs to be on 4-octet boundaries of any acceptable
         length, and provides methods to disambiguate packet parsing in the
@@ -276,7 +276,7 @@
           behavior for RFC 5905.]</t>
       </section>
     </section>
-      
+
     <section title="NTP Extension Fields - RFC 5905 Update">
       <t>This document updates Section 7.5 of <xref target="RFC5905">RFC
           5905</xref> as follows:</t>
@@ -289,29 +289,29 @@
           field contains a request or response message in the format shown
           in Figure 14.</t>
 
-      <t><figure title="Figure 14: Extension Field Format">
-          <artwork name="Figure 14: Extension Field Format"><![CDATA[
+	<t><figure title="Figure 14: Extension Field Format">
+            <artwork name="Figure 14: Extension Field Format"><![CDATA[
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+---------------+---------------+-------------------------------+ 
++---------------+---------------+-------------------------------+
 |          Field Type           |        Field Length           |
-+-------------------------------+-------------------------------+ 
++-------------------------------+-------------------------------+
 .                                                               .
 .                             Value                             .
 .                                                               .
-+-------------------------------+-------------------------------+ 
-|                       Padding (as needed)                     | 
++-------------------------------+-------------------------------+
+|                       Padding (as needed)                     |
 +---------------------------------------------------------------+]]></artwork>
         </figure></t>
-      <t>All extension fields are zero-padded to a word (four octets)
-        boundary.  The Field Type field is specific to the defined function
-        and is not elaborated here.  While the minimum field length
-        containing required fields is four words (16 octets), a maximum
-        field length remains to be established.</t>
+	<t>All extension fields are zero-padded to a word (four octets)
+          boundary.  The Field Type field is specific to the defined
+          function and is not elaborated here.  While the minimum field
+          length containing required fields is four words (16 octets), a
+          maximum field length remains to be established.</t>
 
-      <t>The Length field is a 16-bit unsigned integer that indicates the
-        length of the entire extension field in octets, including the
-        Padding field.</t>
+	<t>The Length field is a 16-bit unsigned integer that indicates the
+          length of the entire extension field in octets, including the
+          Padding field.</t>
       </section>
 
       <section title="NEW: 'RFC5905 Section 7.5 - NTP Extension Field Format'">
@@ -324,106 +324,108 @@
           field contents.  An extension field contains a request or response
           message in the format shown in Figure 14.</t>
 
-      <t><figure title="Figure 14: Extension Field Format">
-          <artwork name="Figure 14: Extension Field Format"><![CDATA[
+	<t><figure title="Figure 14: Extension Field Format">
+            <artwork name="Figure 14: Extension Field Format"><![CDATA[
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+---------------+---------------+-------------------------------+ 
++---------------+---------------+-------------------------------+
 |          Field Type           |        Field Length           |
-+-------------------------------+-------------------------------+ 
++-------------------------------+-------------------------------+
 .                                                               .
 .                             Value                             .
 .                                                               .
-+-------------------------------+-------------------------------+ 
-|                       Padding (as needed)                     | 
++-------------------------------+-------------------------------+
+|                       Padding (as needed)                     |
 +---------------------------------------------------------------+]]></artwork>
         </figure></t>
 
-      <t>The four octets that comprise the Field Type and Field Length are
-	called the Extension Field Header.  Octets beyond the Extension
-	Field Header are called the Extension Field Body, or the Extension
-	Field Payload.  The EF Body (EF Payload) MAY be null in some
-	cases.</t>
+	<t>The four octets that comprise the Field Type and Field Length are
+	  called the Extension Field Header.  Octets beyond the Extension
+	  Field Header are called the Extension Field Body, or the Extension
+	  Field Payload.  The EF Body (EF Payload) MAY be null in some
+	  cases.</t>
 
-      <t>All extension fields are zero-padded to a word (four octet)
-        boundary.  The Field Type is specific to the defined functionality
-        and detailed information about the Field Type is not elaborated
-        here.  The minimum size of an Extension Field is a 32-bit word (4
-        octets), and while the maximum extension field size MUST be 65532
-        octets or less, an NTP packet SHOULD NOT exceed the network MTU.</t>
+	<t>All extension fields are zero-padded to a word (four octet)
+          boundary.  The Field Type is specific to the defined functionality
+          and detailed information about the Field Type is not elaborated
+          here.  The minimum size of an Extension Field is a 32-bit word (4
+          octets), and while the maximum extension field size MUST be 65532
+          octets or less, an NTP packet SHOULD NOT exceed the network
+          MTU.</t>
 
-      <t>The Field Length is a 16-bit unsigned integer that indicates the
-        length of the entire extension field in octets, including any
-        Padding octets.  The bottom two bits of the Field Length SHOULD be
-        zero, and the size of the extension field SHOULD end on a 32-bit (4
-        octet) boundary.  [RFC5905 Section 7.5 says "All extension fields
-        are zero-padded to a word (four octets) boundary." but does not use
-        'MUST' language.  Is it overkill to reiterate this requirement here?
-        Should we use SHOULD or MUST regarding the bottom two bits or the
-        boundary of the EF?  It is possible, down the road, that we might
-        find some use for those bottom 2 bits, even if we require a 32-bit
-        boundary on the last octet of an EF.]</t>
+	<t>The Field Length is a 16-bit unsigned integer that indicates the
+          length of the entire extension field in octets, including any
+          Padding octets.  The bottom two bits of the Field Length SHOULD be
+          zero, and the size of the extension field SHOULD end on a 32-bit
+          (4 octet) boundary.  [RFC5905 Section 7.5 says "All extension
+          fields are zero-padded to a word (four octets) boundary." but does
+          not use 'MUST' language.  Is it overkill to reiterate this
+          requirement here?  Should we use SHOULD or MUST regarding the
+          bottom two bits or the boundary of the EF?  It is possible, down
+          the road, that we might find some use for those bottom 2 bits,
+          even if we require a 32-bit boundary on the last octet of an
+          EF.]</t>
 
-      <t>The Field Type contains the following sub-elements:</t>
-      <t><figure title="Field Type Format">
-          <artwork name="Field Type Format"><![CDATA[
+	<t>The Field Type contains the following sub-elements:</t>
+	<t><figure title="Field Type Format">
+            <artwork name="Field Type Format"><![CDATA[
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+---------------+---------------+-------------------------------+ 
++---------------+---------------+-------------------------------+
 |R|E|      Code |       Type    |       (Field Length)          |
 +-------------------------------+-------------------------------+]]></artwork>
         </figure></t>
-      <t>Where the following Field Type flags are defined:
-      <list>
-        <t> R: 0 for a "Query", 1 for a "Response"</t>
-        <t> E: 0 for "OK", 1 for an "Error".  Unused, and will be deprecated.</t>
-      </list></t>
+	<t>Where the following Field Type flags are defined:
+	  <list>
+            <t> R: 0 for a "Query", 1 for a "Response"</t>
+            <t> E: 0 for "OK", 1 for an "Error".  Unused, and will be deprecated.</t>
+	</list></t>
 
-      <t>[The 'R' flag is currently used by Autokey, and by the proposed
-	I-DO extension field.  This flag is used after the packet is
-	accepted.]</t>
+	<t>[The 'R' flag is currently used by Autokey, and by the proposed
+	  I-DO extension field.  This flag is used after the packet is
+	  accepted.]</t>
 
-      <t>[The 'E' flag was proposed for use by Autokey, after the packet was
-	accepted.  As it was never used and no other use-cases have been
-	identified, we are recommending this flag be deprecated at some
-	point in the future.]</t>
+	<t>[The 'E' flag was proposed for use by Autokey, after the packet
+	  was accepted.  As it was never used and no other use-cases have
+	  been identified, we are recommending this flag be deprecated at
+	  some point in the future.]</t>
 
-      <t>[The EF Code subtype is currently used
-        by <xref target="RFC5906">RFC 5906, Autokey</xref>, by the proposed
-        Extended Information EF proposal, and is expected to be used by the
-        NTS Extension Field, at least.]</t>
+	<t>[The EF Code subtype is currently used
+          by <xref target="RFC5906">RFC 5906, Autokey</xref>, by the
+          proposed Extended Information EF proposal, and is expected to be
+          used by the NTS Extension Field, at least.]</t>
 
-      <t>The Autokey EF currently uses the most Code values - 10 of them,
-	which equates to the least-significant 4 bits of the high-order
-	octet.  It is possible that additional flag bits will be allocated;
-	in the past, the high-order 2 bits were reserved, and for a time two
-	additional bits were proposed.  Make no assumptions about the unused
-	bits in this octet.</t>
+	<t>The Autokey EF currently uses the most Code values - 10 of them,
+	  which equates to the least-significant 4 bits of the high-order
+	  octet.  It is possible that additional flag bits will be
+	  allocated; in the past, the high-order 2 bits were reserved, and
+	  for a time two additional bits were proposed.  Make no assumptions
+	  about the unused bits in this octet.</t>
 
-      <t>The EF Header and Body fields (the Flags, Code, Type, and Length,
-        and any Value or Padding) are specific to the defined functionality
-        and are not elaborated here; appropriate Field Type Flags, the EF
-        Code, and EF Type values are defined in an IANA registry, and the
-        Length, Value, and Padding values are defined by the document
-        referred to by the registry.  If a host receives an extension field
-        with an unknown Field Type, the host SHOULD ignore the extension
-        field and MAY drop the packet altogether, depending on local
-        policy.</t>
+	<t>The EF Header and Body fields (the Flags, Code, Type, and Length,
+          and any Value or Padding) are specific to the defined
+          functionality and are not elaborated here; appropriate Field Type
+          Flags, the EF Code, and EF Type values are defined in an IANA
+          registry, and the Length, Value, and Padding values are defined by
+          the document referred to by the registry.  If a host receives an
+          extension field with an unknown Field Type, the host SHOULD ignore
+          the extension field and MAY drop the packet altogether, depending
+          on local policy.</t>
 
-      <t>The Length field is a 16-bit unsigned integer that indicates the
-        length of the entire extension field in octets, including any
-        Padding.</t>
+	<t>The Length field is a 16-bit unsigned integer that indicates the
+          length of the entire extension field in octets, including any
+          Padding.</t>
 
-      <t>While the minimum field length of an EF that contains no value or
-        padding fields is one word (four octets), and the minimum field
-        length of an EF that contains required fields is two words (8
-        octets), the maximum field length MUST NOT be longer than 65532
-        octets due to the maximum size of the data represented by the Length
-        field, and SHOULD be small enough that the size of the NTP packet
-        received by the client does not exceed the smallest MTU between the
-        sender and the recipient.  The bottom two bits of the Field Length
-        SHOULD be zero and the EF data SHOULD be aligned to a 32-bit (4
-        octet) boundary.</t>
+	<t>While the minimum field length of an EF that contains no value or
+          padding fields is one word (four octets), and the minimum field
+          length of an EF that contains required fields is two words (8
+          octets), the maximum field length MUST NOT be longer than 65532
+          octets due to the maximum size of the data represented by the
+          Length field, and SHOULD be small enough that the size of the NTP
+          packet received by the client does not exceed the smallest MTU
+          between the sender and the recipient.  The bottom two bits of the
+          Field Length SHOULD be zero and the EF data SHOULD be aligned to a
+          32-bit (4 octet) boundary.</t>
       </section>
 
       <section title="NEW: 'RFC5905 Section 7.5.1 - Extension Fields and MACs'">
@@ -435,7 +437,7 @@
 
 	<t>Note well that to-date, there are only two defined Extension
 	  Field Types: Autokey, defined by <xref target="RFC5906">RFC
-	  5906</xref>, and the Experimental UDP Checksum Complement in the
+	    5906</xref>, and the Experimental UDP Checksum Complement in the
 	  Network Time Protocol, defined by
 	  <xref target="RFC7821">RFC 7821</xref>.</t>
 
@@ -488,7 +490,7 @@
 	  what capabilities it is currently willing to exchange.</t>
 
 	<t>The second way to prevent ambiguous parsing is to use the LAST-EF
-	extension field.</t>
+	  extension field.</t>
 
 	<t>By definition, if I-DO is used and each side agrees to support
 	  LAST-EF then LAST-EF will prevent any ambiguity.</t>
@@ -507,42 +509,41 @@
 	  fields and legacy MACs can look at the the drafts that preceded
 	  this document.</t>
 
-        </section>
       </section>
+    </section>
 
-      <section title="OLD: 'RFC5905 Section 9.2. - Peer Process Operations'">
-        <t>...</t>
-        <t>FXMIT. ... This message includes the normal NTP header data shown
-          in Figure 8, but with a MAC consisting of four octets of
-          zeros. ...</t>
-      </section>
+    <section title="OLD: 'RFC5905 Section 9.2. - Peer Process Operations'">
+      <t>...</t>
+      <t>FXMIT. ... This message includes the normal NTP header data shown
+        in Figure 8, but with a MAC consisting of four octets of
+        zeros. ...</t>
+    </section>
 
-      <section title="NEW: 'RFC5905 Section 9.2. - Peer Process Operations'">
-        <t>...</t>
-        <t>FXMIT. ... This message includes the normal NTP header data shown
-          in Figure 8, but with a MAC consisting of four octets of zeros.
-          This MAC can be a legacy MAC or a MAC-EF.  If it's a MAC-EF, the
-          crypto-NAK MUST be the only MAC in the MAC-EF payload.  ...</t>
-      </section>
+    <section title="NEW: 'RFC5905 Section 9.2. - Peer Process Operations'">
+      <t>...</t>
+      <t>FXMIT. ... This message includes the normal NTP header data shown
+        in Figure 8, but with a MAC consisting of four octets of zeros.
+        This MAC can be a legacy MAC or a MAC-EF.  If it's a MAC-EF, the
+        crypto-NAK MUST be the only MAC in the MAC-EF payload.  ...</t>
     </section>
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>The authors wish to acknowledge the contributions of Sam
-      Weiler, Danny Mayer, and Tal Mizrahi.</t>
+	Weiler, Danny Mayer, and Tal Mizrahi.</t>
     </section>
 
     <!-- Possibly a 'Contributors' section ... -->
 
     <section anchor="IANA" title="IANA Considerations">
       <t>This memo requests IANA to update the NTP Extension Field Types
-        table in the NTP Parameters document as follows.  The following is
-        expected to be a functional superset of the existing information:
-        <list>
+	table in the NTP Parameters document as follows.  The following is
+	expected to be a functional superset of the existing information:
+	<list>
           <t>0x8000: R: Response (0: Request, 1: Response)</t>
           <t>0x4000: E: Error (0: OK, 1: Error) - Unused, deprecation expected</t>
-        </list>
+	</list>
       </t>
- 
+
       <t><figure title="Current Extension Fields">
           <artwork name="Current Extension Fields"><![CDATA[
 +------------+---------------------------------------------+
@@ -575,7 +576,7 @@
 |   0x2005   | Checksum Complement                         |
 +------------+---------------------------------------------+
 ]]></artwork>
-        </figure></t>
+      </figure></t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -589,15 +590,15 @@
     <!-- References split into informative and normative -->
 
     <!-- There are 2 ways to insert reference entries from the citation libraries:
-     1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
-     2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
-        (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+	 1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+	 2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+	 (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
 
-     Both are cited textually in the same manner: by using xref elements.
-     If you use the PI option, xml2rfc will, by default, try to find included files in the same
-     directory as the including file. You can also define the XML_LIBRARY environment variable
-     with a value containing a set of directories to search.  These can be either in the local
-     filing system or remote ones accessed by http (http://domain/dir/... ).-->
+	 Both are cited textually in the same manner: by using xref elements.
+	 If you use the PI option, xml2rfc will, by default, try to find included files in the same
+	 directory as the including file. You can also define the XML_LIBRARY environment variable
+	 with a value containing a set of directories to search.  These can be either in the local
+	 filing system or remote ones accessed by http (http://domain/dir/... ).-->
 
     <references title="Normative References">
       <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
@@ -621,26 +622,26 @@
 
     <!-- SW: Except that we're not really using these...
 
-    <references title="Informative References">
-      &RFC3552;
+	 <references title="Informative References">
+	   &RFC3552;
 
-      &I-D.narten-iana-considerations-rfc2434bis;
- 
-    </references> 
-     -->
+	   &I-D.narten-iana-considerations-rfc2434bis;
+
+	 </references>
+	 -->
 
     <!--
-    <section anchor="app-additional" title="Additional Stuff">
-      <t>This becomes an Appendix.</t>
-    </section>
--->
+	<section anchor="app-additional" title="Additional Stuff">
+	  <t>This becomes an Appendix.</t>
+	</section>
+	-->
 
     <!-- Change Log
 
-v02 2016-10-29  HMS: Updates
-v03 2018-08-21  HMS: Updates
-    2018-11-29  HMS: Err32whatever to RFC7822.  Expand on various reasonings.
-v06 2018-03-21  HMS: Updates
+	 v02 2016-10-29  HMS: Updates
+	 v03 2018-08-21  HMS: Updates
+	 2018-11-29  HMS: Err32whatever to RFC7822.  Expand on various reasonings.
+	 v06 2018-03-21  HMS: Updates
       -->
   </back>
 </rfc>
