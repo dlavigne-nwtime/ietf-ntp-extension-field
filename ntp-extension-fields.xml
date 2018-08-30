@@ -367,8 +367,8 @@
           EF.]</t>
 
 	<t>The Field Type contains the following sub-elements:</t>
-	<t><figure title="Field Type Format">
-            <artwork name="Field Type Format"><![CDATA[
+	<t><figure title="Extension Field Header Format">
+            <artwork name="Extension Field Header Format"><![CDATA[
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+---------------+-------------------------------+
@@ -538,9 +538,18 @@
       <t>This memo requests IANA to update the NTP Extension Field Types
 	table in the NTP Parameters document as follows.  The following is
 	expected to be a functional superset of the existing information:
-	<list>
-          <t>0x8000: R: Response (0: Request, 1: Response)</t>
-          <t>0x4000: E: Error (0: OK, 1: Error) - Unused, deprecation expected</t>
+	<t><figure title="NTP Extension Field Type Format">
+            <artwork name="NTP Extension Field Type Format"><![CDATA[
+ 0                   1           
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 
++---------------+---------------+
+|R|E|      Code |       Type    |
++-------------------------------++]]></artwork>
+        </figure></t>
+	<t>Where the following Field Type flags are defined:
+	  <list>
+            <t> R: 0 for a "Query", 1 for a "Response"</t>
+            <t> E: 0 for "OK", 1 for an "Error".  Unused, and will be deprecated.</t>
 	</list>
       </t>
 
